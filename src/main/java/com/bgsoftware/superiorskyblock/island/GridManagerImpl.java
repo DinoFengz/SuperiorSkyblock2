@@ -373,8 +373,8 @@ public class GridManagerImpl extends Manager implements GridManager {
 
                     if (result) {
                         if (affectedChunks != null) {
-                            BukkitExecutor.sync(() -> {
-                                IslandUtils.resetChunksExcludedFromList(island, affectedChunks);
+                            BukkitExecutor.async(() -> {
+//                                IslandUtils.resetChunksExcludedFromList(island, affectedChunks);
                                 island.setBiome(biome, true);
                             }, 10L);
                         }

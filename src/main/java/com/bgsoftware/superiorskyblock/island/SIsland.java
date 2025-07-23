@@ -4333,17 +4333,20 @@ public class SIsland implements Island {
         if (event.getArgs().placeBlock) {
             int combinedId;
 
-            try {
-                Material generateBlockType = Material.valueOf(generatedBlock.getGlobalKey());
-                byte blockData = generatedBlock.getSubKey().isEmpty() ? 0 : Byte.parseByte(generatedBlock.getSubKey());
-                combinedId = plugin.getNMSAlgorithms().getCombinedId(generateBlockType, blockData);
-            } catch (IllegalArgumentException error) {
-                Log.error("Invalid block for generating block: ", generatedBlock);
-                combinedId = plugin.getNMSAlgorithms().getCombinedId(
-                        ((MaterialKey) defaultBlockKey).getMaterial(), (byte) 0);
-            }
+            Material m = Material.valueOf(generatedBlock.getGlobalKey());
+            location.getBlock().setType(m);
 
-            plugin.getNMSWorld().setBlock(location, combinedId);
+//            try {
+//                Material generateBlockType = Material.valueOf(generatedBlock.getGlobalKey());
+//                byte blockData = generatedBlock.getSubKey().isEmpty() ? 0 : Byte.parseByte(generatedBlock.getSubKey());
+//                combinedId = plugin.getNMSAlgorithms().getCombinedId(generateBlockType, blockData);
+//            } catch (IllegalArgumentException error) {
+//                Log.error("Invalid block for generating block: ", generatedBlock);
+//                combinedId = plugin.getNMSAlgorithms().getCombinedId(
+//                        ((MaterialKey) defaultBlockKey).getMaterial(), (byte) 0);
+//            }
+//
+//            plugin.getNMSWorld().setBlock(location, combinedId);
         }
 
         plugin.getNMSWorld().playGeneratorSound(location);
