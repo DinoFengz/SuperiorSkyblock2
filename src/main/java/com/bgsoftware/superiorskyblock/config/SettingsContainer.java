@@ -46,6 +46,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -101,9 +102,11 @@ public class SettingsContainer {
     public final String stackedBlocksMenuTitle;
     public final String islandLevelFormula;
     public final boolean roundedIslandLevel;
+    public final RoundingMode islandLevelRoundingMode;
     public final boolean autoBlocksTracking;
     public final String islandTopOrder;
     public boolean coopMembers;
+    public boolean editPlayerPermissions;
     public final ConfigurationSection islandRolesSection;
     public final long calcInterval;
     public final String signWarpLine;
@@ -138,6 +141,7 @@ public class SettingsContainer {
     public final boolean disbandConfirm;
     public final boolean kickConfirm;
     public final boolean leaveConfirm;
+    public final boolean transferConfirm;
     public final String spawnersProvider;
     public final String stackedBlocksProvider;
     public final boolean disbandInventoryClear;
@@ -148,10 +152,12 @@ public class SettingsContainer {
     public final boolean islandNamesColorSupport;
     public final boolean islandNamesIslandTop;
     public final boolean islandNamesPreventPlayerNames;
+    public final boolean teleportOnCreate;
     public final boolean teleportOnJoin;
     public final boolean teleportOnKick;
     public final boolean clearOnJoin;
     public final boolean rateOwnIsland;
+    public final boolean changeIslandRating;
     public final List<String> defaultSettings;
     public final boolean disableRedstoneOffline;
     public final boolean disableRedstoneAFK;
@@ -207,6 +213,7 @@ public class SettingsContainer {
     public final boolean physicsListener;
     public final double chargeOnWarp;
     public final boolean publicWarps;
+    public final boolean lockedIslands;
     public final long recalcTaskTimeout;
     public final boolean autoLanguageDetection;
     public final boolean autoUncoopWhenAlone;
@@ -289,9 +296,13 @@ public class SettingsContainer {
         stackedBlocksMenuTitle = Formatters.COLOR_FORMATTER.format(config.getString("stacked-blocks.deposit-menu.title", "&lDeposit Blocks"));
         islandLevelFormula = config.getString("island-level-formula", "{} / 2");
         roundedIslandLevel = config.getBoolean("rounded-island-level", false);
+        islandLevelRoundingMode = Optional.ofNullable(EnumHelper.getEnum(RoundingMode.class,
+                        config.getString("island-level-rounding-mode").toUpperCase(Locale.ENGLISH)))
+                .orElse(RoundingMode.HALF_UP);
         autoBlocksTracking = config.getBoolean("auto-blocks-tracking", true);
         islandTopOrder = config.getString("island-top-order", "WORTH").toUpperCase(Locale.ENGLISH);
         coopMembers = config.getBoolean("coop-members", true);
+        editPlayerPermissions = config.getBoolean("edit-player-permissions", true);
         islandRolesSection = config.getConfigurationSection("island-roles");
         signWarpLine = config.getString("sign-warp-line", "[IslandWarp]");
         List<String> signWarp = Formatters.formatList(config.getStringList("sign-warp"), Formatters.COLOR_FORMATTER);
@@ -374,6 +385,7 @@ public class SettingsContainer {
         disbandConfirm = config.getBoolean("disband-confirm");
         kickConfirm = config.getBoolean("kick-confirm");
         leaveConfirm = config.getBoolean("leave-confirm");
+        transferConfirm = config.getBoolean("transfer-confirm");
         spawnersProvider = config.getString("spawners-provider", "AUTO");
         stackedBlocksProvider = config.getString("stacked-blocks-provider", "AUTO");
         disbandInventoryClear = config.getBoolean("disband-inventory-clear", true);
@@ -386,10 +398,12 @@ public class SettingsContainer {
         islandNamesColorSupport = config.getBoolean("island-names.color-support", true);
         islandNamesIslandTop = config.getBoolean("island-names.island-top", true);
         islandNamesPreventPlayerNames = config.getBoolean("island-names.prevent-player-names", true);
+        teleportOnCreate = config.getBoolean("teleport-on-create", true);
         teleportOnJoin = config.getBoolean("teleport-on-join", false);
-        teleportOnKick = config.getBoolean("teleport-on-kick", false);
+        teleportOnKick = config.getBoolean("teleport-on-kick", true);
         clearOnJoin = config.getBoolean("clear-on-join", false);
         rateOwnIsland = config.getBoolean("rate-own-island", false);
+        changeIslandRating = config.getBoolean("change-island-rating", true);
         defaultSettings = Collections.unmodifiableList(config.getStringList("default-settings")
                 .stream().map(str -> str.toUpperCase(Locale.ENGLISH)).collect(Collectors.toList()));
         defaultGenerator = new EnumerateMap<>(Dimension.values());
@@ -529,6 +543,7 @@ public class SettingsContainer {
         physicsListener = config.getBoolean("physics-listener", true);
         chargeOnWarp = config.getDouble("charge-on-warp", 0D);
         publicWarps = config.getBoolean("public-warps");
+        lockedIslands = config.getBoolean("locked-islands", false);
         recalcTaskTimeout = config.getLong("recalc-task-timeout");
         autoLanguageDetection = config.getBoolean("auto-language-detection", true);
         autoUncoopWhenAlone = config.getBoolean("auto-uncoop-when-alone", false);

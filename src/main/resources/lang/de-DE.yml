@@ -819,6 +819,7 @@ RANKUP_SUCCESS_ALL: '&e&lInsel | &7Das Upgrade-Level {0} für alle Inseln erfolg
   aktualisiert.'
 RANKUP_SUCCESS_NAME: '&e&lInsel | &7Die Aktualisierungsstufe {0} für {1} wurde erfolgreich
   aktualisiert.'
+RATE_ALREADY_GIVEN: '&c&lError | &7You already rated this island.'
 RATE_ANNOUNCEMENT: '&e&lInsel | &7{0} hat deine Insel mit {1} von 5 Punkten bewertet!.'
 RATE_CHANGE_OTHER: '&e&lInsel | &7Du hast die Bewertung von {0} in {1} geändert.'
 RATE_OWN_ISLAND: '&c&lError | &7Du kannst deine eigene Insel nicht bewerten.'
@@ -866,6 +867,8 @@ SETTINGS_UPDATED_ALL: '&e&lInsel | &7Die Einstellungen {0} wurden erfolgreich f�
   alle Inseln aktualisiert.'
 SIZE_BIGGER_MAX: '&c&lError | &7Du kannst keine Größe festlegen, die größer als die
   maximale Inselgröße ist.'
+SPAWN_PROTECTED: '&c&lError | &7Spawn is protected.'
+SPAWN_PROTECTED_OPPED: '&7&oYou can bypass this restriction by using "/is admin bypass".'
 SPAWN_TELEPORT_SUCCESS: '&e&lSpawn | &7Erfolgreich teleportiert {0} zum Spawn.'
 SPAWN_SET_SUCCESS: '&e&lSpawn | &7Der Spawn-Speicherort wurde erfolgreich auf {0}
   aktualisiert.'

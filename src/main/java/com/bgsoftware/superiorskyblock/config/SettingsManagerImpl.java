@@ -31,6 +31,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -137,6 +138,11 @@ public class SettingsManagerImpl extends Manager implements SettingsManager {
     }
 
     @Override
+    public RoundingMode getIslandLevelRoundingMode() {
+        return this.global.getIslandLevelRoundingMode();
+    }
+
+    @Override
     public boolean isAutoBlocksTracking() {
         return this.global.isAutoBlocksTracking();
     }
@@ -149,6 +155,11 @@ public class SettingsManagerImpl extends Manager implements SettingsManager {
     @Override
     public boolean isCoopMembers() {
         return this.global.isCoopMembers();
+    }
+
+    @Override
+    public boolean isEditPlayerPermissions() {
+        return this.global.isEditPlayerPermissions();
     }
 
     @Override
@@ -247,6 +258,11 @@ public class SettingsManagerImpl extends Manager implements SettingsManager {
     }
 
     @Override
+    public boolean isTransferConfirm() {
+        return this.global.isTransferConfirm();
+    }
+
+    @Override
     public String getSpawnersProvider() {
         return this.global.getSpawnersProvider();
     }
@@ -267,6 +283,11 @@ public class SettingsManagerImpl extends Manager implements SettingsManager {
     }
 
     @Override
+    public boolean isTeleportOnCreate() {
+        return this.global.isTeleportOnCreate();
+    }
+
+    @Override
     public boolean isTeleportOnJoin() {
         return this.global.isTeleportOnJoin();
     }
@@ -284,6 +305,11 @@ public class SettingsManagerImpl extends Manager implements SettingsManager {
     @Override
     public boolean isRateOwnIsland() {
         return this.global.isRateOwnIsland();
+    }
+
+    @Override
+    public boolean isChangeIslandRating() {
+        return this.global.isChangeIslandRating();
     }
 
     @Override
@@ -539,6 +565,11 @@ public class SettingsManagerImpl extends Manager implements SettingsManager {
     @Override
     public boolean isPublicWarps() {
         return this.global.isPublicWarps();
+    }
+
+    @Override
+    public boolean isLockedIslands() {
+        return this.global.isLockedIslands();
     }
 
     @Override

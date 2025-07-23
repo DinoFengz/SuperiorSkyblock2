@@ -523,7 +523,9 @@ public class ProvidersManagerImpl extends Manager implements ProvidersManager {
         } else if (canRegisterHook("EpicSpawners") &&
                 (auto || configSpawnersProvider.equalsIgnoreCase("EpicSpawners"))) {
             String version = Bukkit.getPluginManager().getPlugin("EpicSpawners").getDescription().getVersion();
-            if (version.startsWith("8")) {
+            if (version.startsWith("9")) {
+                spawnersProvider = createInstance("spawners.SpawnersProvider_EpicSpawners9");
+            } else if (version.startsWith("8")) {
                 spawnersProvider = createInstance("spawners.SpawnersProvider_EpicSpawners8");
             } else if (version.startsWith("7")) {
                 spawnersProvider = createInstance("spawners.SpawnersProvider_EpicSpawners7");
@@ -532,7 +534,11 @@ public class ProvidersManagerImpl extends Manager implements ProvidersManager {
             }
         } else if (canRegisterHook("UltimateStacker") &&
                 (auto || configSpawnersProvider.equalsIgnoreCase("UltimateStacker"))) {
-            if (Bukkit.getPluginManager().getPlugin("UltimateStacker").getDescription().getVersion().startsWith("3")) {
+            String version = Bukkit.getPluginManager().getPlugin("UltimateStacker").getDescription().getVersion();
+            int majorVersion = Integer.parseInt(String.valueOf(version.charAt(0)));
+            if (majorVersion >= 4) {
+                spawnersProvider = createInstance("spawners.SpawnersProvider_UltimateStacker4");
+            } else if (majorVersion == 3) {
                 spawnersProvider = createInstance("spawners.SpawnersProvider_UltimateStacker3");
             } else {
                 spawnersProvider = createInstance("spawners.SpawnersProvider_UltimateStacker");

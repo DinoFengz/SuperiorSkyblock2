@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,12 @@ public interface SettingsManager {
     boolean isRoundedIslandLevels();
 
     /**
+     * The rounding mode used for the island level when rounded-island-level feature is enabled.
+     * Config path: island-level-rounding-mode
+     */
+    RoundingMode getIslandLevelRoundingMode();
+
+    /**
      * Whether to automatic track block counts when players place and break blocks.
      * Config path: auto-blocks-tracking
      */
@@ -102,6 +109,12 @@ public interface SettingsManager {
      * Config path: coop-members
      */
     boolean isCoopMembers();
+
+    /**
+     * Should players be able to edit island privileges for other players?
+     * Config path: edit-player-permissions
+     */
+    boolean isEditPlayerPermissions();
 
     /**
      * All settings related to the island-roles.
@@ -217,6 +230,12 @@ public interface SettingsManager {
     boolean isLeaveConfirm();
 
     /**
+     * Whether confirmation menu should be opened before transfering an island or not.
+     * Config-path: transfer-confirm
+     */
+    boolean isTransferConfirm();
+
+    /**
      * The spawners-provider to use.
      * If set to AUTO, the plugin will automatically detect an available spawners provider and use it.
      * Config-path: spawners-provider
@@ -243,6 +262,12 @@ public interface SettingsManager {
     IslandNames getIslandNames();
 
     /**
+     * Whether to teleport players to their island when they create it or not.
+     * Config path: teleport-on-create
+     */
+    boolean isTeleportOnCreate();
+
+    /**
      * Whether to teleport players to their island when they join it or not.
      * Config-path: teleport-on-join
      */
@@ -265,6 +290,12 @@ public interface SettingsManager {
      * Config-path: rate-own-island
      */
     boolean isRateOwnIsland();
+
+    /**
+     * Whether players can change island rating or not.
+     * Config-path: change-island-rating
+     */
+    boolean isChangeIslandRating();
 
     /**
      * All the default island-flags that will be enabled for new islands.
@@ -585,6 +616,12 @@ public interface SettingsManager {
      * Config-path: public-warps
      */
     boolean isPublicWarps();
+
+    /**
+     * Whether islands should be locked by default or not.
+     * Config-path: locked-islands
+     */
+    boolean isLockedIslands();
 
     /**
      * Cooldown between recalculations of an island, in seconds.
