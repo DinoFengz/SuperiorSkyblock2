@@ -6,7 +6,7 @@ import com.bgsoftware.superiorskyblock.api.key.Key;
 import com.bgsoftware.superiorskyblock.api.world.Dimension;
 import com.bgsoftware.superiorskyblock.core.EnumHelper;
 import com.bgsoftware.superiorskyblock.core.ObjectsPools;
-import com.bgsoftware.superiorskyblock.module.generators.GeneratorsModule;
+import com.bgsoftware.superiorskyblock.module.BuiltinModules;
 import com.bgsoftware.superiorskyblock.world.Dimensions;
 import com.bgsoftware.superiorskyblock.world.GeneratorType;
 import org.bukkit.Location;
@@ -31,16 +31,14 @@ public class GeneratorsListener implements Listener {
     private static final Material BLUE_ICE_MATERIAL = EnumHelper.getEnum(Material.class, "BLUE_ICE");
 
     private final SuperiorSkyblockPlugin plugin;
-    private final GeneratorsModule module;
 
-    public GeneratorsListener(SuperiorSkyblockPlugin plugin, GeneratorsModule module) {
+    public GeneratorsListener(SuperiorSkyblockPlugin plugin) {
         this.plugin = plugin;
-        this.module = module;
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockFormEvent(BlockFormEvent e) {
-        if (!module.isEnabled())
+        if (!BuiltinModules.GENERATORS.isEnabled())
             return;
 
         try (ObjectsPools.Wrapper<Location> wrapper = ObjectsPools.LOCATION.obtain()) {
@@ -58,7 +56,7 @@ public class GeneratorsListener implements Listener {
                 return;
 
             Dimension dimension;
-            if (module.isMatchGeneratorWorld()) {
+            if (BuiltinModules.GENERATORS.getConfiguration().isMatchGeneratorWorld()) {
                 dimension = Dimensions.NETHER;
             } else {
                 World blockWorld = blockLocation.getWorld();
@@ -75,7 +73,7 @@ public class GeneratorsListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onBlockFromToEvent(BlockFromToEvent e) {
-        if (!module.isEnabled())
+        if (!BuiltinModules.GENERATORS.isEnabled())
             return;
 
         Block eventSourceBlock = e.getBlock();
@@ -124,7 +122,7 @@ public class GeneratorsListener implements Listener {
 
 
             Dimension dimension;
-            if (module.isMatchGeneratorWorld()) {
+            if (BuiltinModules.GENERATORS.getConfiguration().isMatchGeneratorWorld()) {
                 dimension = generatorType == GeneratorType.BASALT ? Dimensions.NETHER : Dimensions.NORMAL;
             } else {
                 dimension = Optional.ofNullable(plugin.getProviders().getWorldsProvider().getIslandsWorldDimension(blockWorld))

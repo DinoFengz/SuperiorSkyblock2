@@ -34,42 +34,59 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 public class BukkitEntities {
 
     private static final SuperiorSkyblockPlugin plugin = SuperiorSkyblockPlugin.getPlugin();
-    private static final Map<UUID, List<ItemStack>> entityContent = new HashMap<>();
+    private static final Map<UUID, List<ItemStack>> entityContent = new ConcurrentHashMap<>();
     private static final Class<?> HOGLIN_CLASS = getEntityTypeClass("org.bukkit.entity.Hoglin");
     private static final Class<?> SKELETON_HORSE_CLASS = getEntityTypeClass("org.bukkit.entity.SkeletonHorse");
     private static final Class<?> ZOMBIE_HORSE_CLASS = getEntityTypeClass("org.bukkit.entity.ZombieHorse");
     @Nullable
     private static final EntityType CAMEL_TYPE = EnumHelper.getEnum(EntityType.class, "CAMEL");
 
+    private static final EnumMap<EntityType, EntityCategory> ENTITY_CATEGORIES_CACHE = new EnumMap<>(EntityType.class);
+
+    static {
+        outerLoop:
+        for (EntityType entityType : EntityType.values()) {
+            for (EntityCategory entityCategory : EntityCategory.values()) {
+                if (entityCategory.isFromCategory(entityType)) {
+                    ENTITY_CATEGORIES_CACHE.put(entityType, entityCategory);
+                    continue outerLoop;
+                }
+            }
+        }
+    }
+
     private BukkitEntities() {
 
     }
 
     public static boolean isEquipment(LivingEntity livingEntity, ItemStack itemStack) {
-        List<ItemStack> entityEquipment = entityContent.get(livingEntity.getUniqueId());
-
-        if (entityEquipment == null) {
-            cacheEntityEquipment(livingEntity);
-            entityEquipment = entityContent.get(livingEntity.getUniqueId());
-        }
+        List<ItemStack> entityEquipment = entityContent.computeIfAbsent(livingEntity.getUniqueId(), u ->
+                cacheEntityEquipmentInternal(livingEntity));
 
         return entityEquipment.stream().anyMatch(equipmentItem -> equipmentItem != null &&
                 equipmentItem.getType() == itemStack.getType());
     }
 
     public static void cacheEntityEquipment(LivingEntity livingEntity) {
+        List<ItemStack> entityEquipment = cacheEntityEquipmentInternal(livingEntity);
+        entityContent.put(livingEntity.getUniqueId(), entityEquipment);
+    }
+
+    private static List<ItemStack> cacheEntityEquipmentInternal(LivingEntity livingEntity) {
         List<ItemStack> entityEquipment = new LinkedList<>(Arrays.asList(plugin.getNMSEntities().getEquipment(livingEntity.getEquipment())));
 
         if (livingEntity instanceof Pig) {
@@ -108,7 +125,7 @@ public class BukkitEntities {
         } catch (Throwable ignored) {
         }
 
-        entityContent.put(livingEntity.getUniqueId(), entityEquipment);
+        return entityEquipment.isEmpty() ? Collections.emptyList() : entityEquipment;
     }
 
     public static void clearEntityEquipment(LivingEntity livingEntity) {
@@ -157,12 +174,7 @@ public class BukkitEntities {
     }
 
     public static EntityCategory getCategory(EntityType entityType) {
-        for (EntityCategory entityCategory : EntityCategory.values()) {
-            if (entityCategory.isFromCategory(entityType))
-                return entityCategory;
-        }
-
-        return EntityCategory.UNKNOWN;
+        return ENTITY_CATEGORIES_CACHE.getOrDefault(entityType, EntityCategory.UNKNOWN);
     }
 
     public static boolean isHorse(Entity entity) {
