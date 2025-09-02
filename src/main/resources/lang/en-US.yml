@@ -204,6 +204,7 @@ COMMAND_DESCRIPTION_ADMIN_SET_CROP_GROWTH: 'Set the crop growth multiplier for a
 COMMAND_DESCRIPTION_ADMIN_SET_DISBANDS: 'Set a player''s amount of island disbands.'
 COMMAND_DESCRIPTION_ADMIN_SET_EFFECT: 'Set the island effect level of another player''s island.'
 COMMAND_DESCRIPTION_ADMIN_SET_ENTITY_LIMIT: 'Set entity limit for another player''s island.'
+COMMAND_DESCRIPTION_ADMIN_SET_ISLAND_PREVIEW: 'Set the preview location for an island.'
 COMMAND_DESCRIPTION_ADMIN_SET_LEADER: 'Transfer an island to someone else.'
 COMMAND_DESCRIPTION_ADMIN_SET_MOB_DROPS: 'Set the mob drops multiplier for another player''s island.'
 COMMAND_DESCRIPTION_ADMIN_SET_PERMISSION: 'Set a required role for a permission for all the islands.'
@@ -233,6 +234,7 @@ COMMAND_DESCRIPTION_ADMIN_WITHDRAW: 'Withdraw money from another player''s islan
 COMMAND_DESCRIPTION_BALANCE: 'Check the amount of money inside an island''s bank.'
 COMMAND_DESCRIPTION_BAN: 'Ban a player from your island.'
 COMMAND_DESCRIPTION_BANK: 'Open the island''s bank.'
+COMMAND_DESCRIPTION_BANS: 'Open the bans menu.'
 COMMAND_DESCRIPTION_BIOME: 'Change the biome of the island.'
 COMMAND_DESCRIPTION_BORDER: 'Change the border color of the islands.'
 COMMAND_DESCRIPTION_CHEST: 'Open the island''s chest.'
@@ -495,6 +497,7 @@ ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&lPreview | &7You went too far away, and you 
 ISLAND_PREVIEW_CANCEL: '&e&lPreview | &7You cancelled the preview mode.'
 ISLAND_PREVIEW_CONFIRM_TEXT: 'CONFIRM'
 ISLAND_PREVIEW_CANCEL_TEXT: 'CANCEL'
+ISLAND_PREVIEW_SET: '&e&lPreview | &7Successfully updated the preview location for {0} schematic to {1}.'
 ISLAND_PREVIEW_START: |
   &e&lPreview | &7You started the preview mode for the schematic {0}.
   &e&lPreview | &7Type &a&lCONFIRM &7to create a new island, or &c&lCANCEL &7to cancel the preview mode.
@@ -741,6 +744,7 @@ UNSAFE_WARP: '&e&lIsland | &7&oLooks like this warp is unsafe. Please try anothe
 UPDATED_PERMISSION: '&e&lIsland | &7Updated permissions for {0}.'
 UPDATED_SETTINGS: '&e&lIsland | &7Updated the island settings {0}.'
 UPGRADE_COOLDOWN_FORMAT: '&c&lError | &7You may only upgrade again in {0}.'
+VAULT_NOT_INSTALLED: '&c&lError | &7Server doesn''t have vault installed so transactions are disabled.'
 VISITOR_BLOCK_COMMAND: '&c&lError | &7You cannot use that command on other islands.'
 WARP_ALREADY_EXIST: '&c&lError | &7There is already a warp with this name.'
 WARP_CATEGORY_ICON_NEW_LORE: |

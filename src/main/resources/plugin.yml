@@ -61,6 +61,8 @@ permissions:
             description: Ban a player from your island.
           superior.island.bank:
             description: Open the island's bank.
+          superior.island.bans:
+            description: Open the bans menu.
           superior.island.biome:
             description: Change the biome of the island.
           superior.island.border:
@@ -295,6 +297,8 @@ permissions:
             description: Set entity limit for another player's island.
           superior.admin.setgenerator:
             description: Change percentage of a material for the cobblestone generator.
+          superior.admin.setislandpreview:
+            description: Set the preview location for an island.
           superior.admin.setleader:
             description: Transfer an island to someone else.
           superior.admin.setmobdrops:

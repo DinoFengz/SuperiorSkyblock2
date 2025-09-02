@@ -204,6 +204,7 @@ COMMAND_DESCRIPTION_ADMIN_SET_CROP_GROWTH: 'Установить множите�
 COMMAND_DESCRIPTION_ADMIN_SET_DISBANDS: 'Установить количество расформирований для игрока.'
 COMMAND_DESCRIPTION_ADMIN_SET_EFFECT: 'Установить уровень эффекта острова для другого игрока.'
 COMMAND_DESCRIPTION_ADMIN_SET_ENTITY_LIMIT: 'Установить лимит сущностей для острова другого игрока.'
+COMMAND_DESCRIPTION_ADMIN_SET_ISLAND_PREVIEW: 'Set the preview location for an island.'
 COMMAND_DESCRIPTION_ADMIN_SET_LEADER: 'Передать остров другому игроку.'
 COMMAND_DESCRIPTION_ADMIN_SET_MOB_DROPS: 'Установить множитель дропа мобов для острова другого игрока.'
 COMMAND_DESCRIPTION_ADMIN_SET_PERMISSION: 'Установить необходимую роль для разрешения для всех островов.'
@@ -233,6 +234,7 @@ COMMAND_DESCRIPTION_ADMIN_WITHDRAW: 'Снять деньги с банка ос�
 COMMAND_DESCRIPTION_BALANCE: 'Проверить количество денег в банке острова.'
 COMMAND_DESCRIPTION_BAN: 'Забанить игрока на своем острове.'
 COMMAND_DESCRIPTION_BANK: 'Открыть банк острова.'
+COMMAND_DESCRIPTION_BANS: 'Open the bans menu.'
 COMMAND_DESCRIPTION_BIOME: 'Изменить биом острова.'
 COMMAND_DESCRIPTION_BORDER: 'Изменить цвет границы островов.'
 COMMAND_DESCRIPTION_CHEST: 'Открыть сундук острова.'
@@ -495,6 +497,7 @@ ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&lПредпросмотр | &7Вы отош�
 ISLAND_PREVIEW_CANCEL: '&e&lПредпросмотр | &7Вы отменили режим предпросмотра.'
 ISLAND_PREVIEW_CONFIRM_TEXT: 'ПОДТВЕРДИТЬ'
 ISLAND_PREVIEW_CANCEL_TEXT: 'ОТМЕНА'
+ISLAND_PREVIEW_SET: '&e&lPreview | &7Successfully updated the preview location for {0} schematic to {1}.'
 ISLAND_PREVIEW_START: |
   &e&lПредпросмотр | &7Вы начали режим предпросмотра для схемы {0}.
   &e&lПредпросмотр | &7Введите &a&lПОДТВЕРДИТЬ &7для создания нового острова или &c&lОТМЕНА &7для отмены режима предпросмотра.
@@ -738,6 +741,7 @@ UNSAFE_WARP: '&e&lОстров | &7&oПохоже, этот варп небез�
 UPDATED_PERMISSION: '&e&lОстров | &7Обновлены права для {0}.'
 UPDATED_SETTINGS: '&e&lОстров | &7Обновлены настройки острова {0}.'
 UPGRADE_COOLDOWN_FORMAT: '&c&lОшибка | &7Вы можете улучшить только через {0}.'
+VAULT_NOT_INSTALLED: '&c&lError | &7Server doesn''t have vault installed so transactions are disabled.'
 VISITOR_BLOCK_COMMAND: '&c&lОшибка | &7Вы не можете использовать эту команду на других островах.'
 WARP_ALREADY_EXIST: '&c&lОшибка | &7Варп с таким именем уже существует.'
 WARP_CATEGORY_ICON_NEW_LORE: |

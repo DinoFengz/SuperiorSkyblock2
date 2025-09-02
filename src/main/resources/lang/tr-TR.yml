@@ -268,6 +268,7 @@ COMMAND_DESCRIPTION_ADMIN_SET_EFFECT: Başka bir oyuncunun adasının ada efekt 
   ayarla.
 COMMAND_DESCRIPTION_ADMIN_SET_ENTITY_LIMIT: Başka bir oyuncunun adası için varlık
   limitini ayarla.
+COMMAND_DESCRIPTION_ADMIN_SET_ISLAND_PREVIEW: 'Set the preview location for an island.'
 COMMAND_DESCRIPTION_ADMIN_SET_LEADER: Bir adayı başkasına devret.
 COMMAND_DESCRIPTION_ADMIN_SET_MOB_DROPS: Başka bir oyuncunun adası için mob düşürme
   çarpanını ayarla.
@@ -305,6 +306,7 @@ COMMAND_DESCRIPTION_ADMIN_WITHDRAW: Başka bir oyuncunun ada bankasından para �
 COMMAND_DESCRIPTION_BALANCE: Bir adanın bankasındaki para miktarını kontrol et.
 COMMAND_DESCRIPTION_BAN: Adandan bir oyuncuyu yasakla.
 COMMAND_DESCRIPTION_BANK: Adanın bankasını aç.
+COMMAND_DESCRIPTION_BANS: 'Open the bans menu.'
 COMMAND_DESCRIPTION_BIOME: Adanın biyomunu değiştir.
 COMMAND_DESCRIPTION_BORDER: Adaların sınır rengini değiştir.
 COMMAND_DESCRIPTION_CHEST: Adanın sandığını aç.
@@ -583,8 +585,9 @@ ISLAND_OPENED: '&e&lAda | &7Ada başarıyla halka açıldı.'
 ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&lÖnizleme | &7Çok uzaklaştın ve artık önizleme
   modunda değilsin.'
 ISLAND_PREVIEW_CANCEL: '&e&lÖnizleme | &7Önizleme modunu iptal ettin.'
-ISLAND_PREVIEW_CONFIRM_TEXT: ONAYLA
-ISLAND_PREVIEW_CANCEL_TEXT: İPTAL ET
+ISLAND_PREVIEW_CONFIRM_TEXT: 'ONAYLA'
+ISLAND_PREVIEW_CANCEL_TEXT: 'İPTAL ET'
+ISLAND_PREVIEW_SET: '&e&lPreview | &7Successfully updated the preview location for {0} schematic to {1}.'
 ISLAND_PREVIEW_START: |
   &e&lÖnizleme | &7{0} şematiği için önizleme modunu başlattın.
   &e&lÖnizleme | &7Yeni bir ada oluşturmak için &a&lONAYLA &7yaz, veya önizleme modunu iptal etmek için &c&lİPTAL ET &7yaz.
@@ -876,6 +879,7 @@ UNSAFE_WARP: '&e&lAda | &7&oBu ışınlanma güvensiz görünüyor. Lütfen baş
 UPDATED_PERMISSION: '&e&lAda | &7{0} için izinler güncellendi.'
 UPDATED_SETTINGS: '&e&lAda | &7Ada ayarları {0} güncellendi.'
 UPGRADE_COOLDOWN_FORMAT: '&c&lHata | &7Sadece {0} içinde tekrar yükseltme yapabilirsin.'
+VAULT_NOT_INSTALLED: '&c&lError | &7Server doesn''t have vault installed so transactions are disabled.'
 VISITOR_BLOCK_COMMAND: '&c&lHata | &7Bu komutu başka adalarda kullanamazsın.'
 WARP_ALREADY_EXIST: '&c&lHata | &7Bu adla bir ışınlanma noktası zaten var.'
 WARP_CATEGORY_ICON_NEW_LORE: |

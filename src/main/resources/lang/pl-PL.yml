@@ -204,6 +204,7 @@ COMMAND_DESCRIPTION_ADMIN_SET_CROP_GROWTH: 'Ustaw mnoznik wzrostu plonów dla wy
 COMMAND_DESCRIPTION_ADMIN_SET_DISBANDS: 'Ustaw ilosc rozwiazanych wysp dla gracza.'
 COMMAND_DESCRIPTION_ADMIN_SET_EFFECT: 'Ustaw level wyspy innego gracza'
 COMMAND_DESCRIPTION_ADMIN_SET_ENTITY_LIMIT: 'Ustaw limit jednostek dla wyspy innego gracza.'
+COMMAND_DESCRIPTION_ADMIN_SET_ISLAND_PREVIEW: 'Ustaw lokalizacje podgladu dla wyspy.'
 COMMAND_DESCRIPTION_ADMIN_SET_LEADER: 'Przenies wyspe komus innemu.'
 COMMAND_DESCRIPTION_ADMIN_SET_MOB_DROPS: 'Ustaw mnoznik dropów mobów dla wyspy innego gracza.'
 COMMAND_DESCRIPTION_ADMIN_SET_PERMISSION: 'Ustaw wymagana role uprawnień dla wszystkich wysp.'
@@ -233,6 +234,7 @@ COMMAND_DESCRIPTION_ADMIN_WITHDRAW: 'Wyplac pieniadze z banku wyspy innego gracz
 COMMAND_DESCRIPTION_BALANCE: 'Sprawdz ilosc pieniedzy w banku wyspy.'
 COMMAND_DESCRIPTION_BAN: 'Zablokuj gracza na swojej wyspie.'
 COMMAND_DESCRIPTION_BANK: 'Otwórz bank wyspy.'
+COMMAND_DESCRIPTION_BANS: 'Otwórz menu banów.'
 COMMAND_DESCRIPTION_BIOME: 'Zmień biom wyspy.'
 COMMAND_DESCRIPTION_BORDER: 'Zmień kolor bariery wysp.'
 COMMAND_DESCRIPTION_CHEST: 'Otwórz skrzynie wyspy.'
@@ -493,11 +495,12 @@ ISLAND_INFO_WORTH: '&e&lWyspa | &7Wartosc: {0}'
 ISLAND_OPENED: '&e&lWyspa | &7Pomyslnie zmieniles status wyspy na publiczny.'
 ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&lPodglad | &7Odszedles za daleko, nie jestes juz w trybie podgladu.'
 ISLAND_PREVIEW_CANCEL: '&e&lPodglad | &7Anulowales tryb podgladu.'
-ISLAND_PREVIEW_CONFIRM_TEXT: 'CONFIRM'
-ISLAND_PREVIEW_CANCEL_TEXT: 'CANCEL'
+ISLAND_PREVIEW_CONFIRM_TEXT: 'POTWIERDZ'
+ISLAND_PREVIEW_CANCEL_TEXT: 'ANULUJ'
+ISLAND_PREVIEW_SET: '&e&lPodglad | &7Pomyslnie zaktualizowano lokalizacje podgladu dla schematu {0} na {1}.'
 ISLAND_PREVIEW_START: |
   &e&lPodglad | &7Wlaczyles tryb podgladu dla schematu {0}.
-  &e&lPodglad | &7Wpisz &a&lCONFIRM &7by stworzyc nowa wyspe, lub &c&lCANCEL &7by wylaczyc tryb podladu.
+  &e&lPodglad | &7Wpisz &a&lPOTWIERDZ &7by stworzyc nowa wyspe, lub &c&lANULUJ &7by wylaczyc tryb podladu.
   &e&lPodglad | &7Nie mozesz opuscic terenu wyspy, w przeciwnym razie tryb podgladowy zostanie anulowany.
 ISLAND_PROTECTED: '&c&lBlad | &7Ta wyspa jest chroniona.'
 ISLAND_PROTECTED_OPPED: '&7&oMozesz ominac to ograniczenie, uzywajac "/is admin bypass".'
@@ -738,6 +741,7 @@ UNSAFE_WARP: '&e&lWyspa | &7&oWyglada na to, ze to wypaczenie jest niebezpieczne
 UPDATED_PERMISSION: '&e&lWyspa | &7Zaktualizowano uprawnienia dla {0}.'
 UPDATED_SETTINGS: '&e&lWyspa | &7Zaktualizowano ustawienia wyspy {0}.'
 UPGRADE_COOLDOWN_FORMAT: '&c&lBlad | &7Mozesz uaktualnic ponownie dopiero za {0}.'
+VAULT_NOT_INSTALLED: '&c&lBlad | &7Na serwerze nie ma zainstalowanego pluginu Vault, wiec transakcje sa wylaczone.'
 VISITOR_BLOCK_COMMAND: '&c&lBlad | &7Nie mozesz uzyc tego polecenia na innych wyspach.'
 WARP_ALREADY_EXIST: '&c&lBlad | &7Istnieje juz warp o tej nazwie.'
 WARP_CATEGORY_ICON_NEW_LORE: |

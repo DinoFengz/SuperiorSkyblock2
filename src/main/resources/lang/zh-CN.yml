@@ -204,6 +204,7 @@ COMMAND_DESCRIPTION_ADMIN_SET_CROP_GROWTH: '设置指定岛屿的作物生长倍
 COMMAND_DESCRIPTION_ADMIN_SET_DISBANDS: '设置岛屿解散所需玩家数量.'
 COMMAND_DESCRIPTION_ADMIN_SET_EFFECT: '设置指定岛屿的效果等级.'
 COMMAND_DESCRIPTION_ADMIN_SET_ENTITY_LIMIT: '设置指定岛屿的实体数量限制.'
+COMMAND_DESCRIPTION_ADMIN_SET_ISLAND_PREVIEW: 'Set the preview location for an island.'
 COMMAND_DESCRIPTION_ADMIN_SET_LEADER: '将岛屿所有权转移给其他玩家.'
 COMMAND_DESCRIPTION_ADMIN_SET_MOB_DROPS: '设置指定岛屿的生物掉落物倍率.'
 COMMAND_DESCRIPTION_ADMIN_SET_PERMISSION: '设置所有岛屿上的指定权限所需的职位.'
@@ -233,6 +234,7 @@ COMMAND_DESCRIPTION_ADMIN_WITHDRAW: '从指定岛屿的银行中取款.'
 COMMAND_DESCRIPTION_BALANCE: '检查指定岛屿银行中的存款.'
 COMMAND_DESCRIPTION_BAN: '将指定玩家从你的岛屿上封禁.'
 COMMAND_DESCRIPTION_BANK: '打开岛屿银行.'
+COMMAND_DESCRIPTION_BANS: 'Open the bans menu.'
 COMMAND_DESCRIPTION_BIOME: '更换岛屿生物群系.'
 COMMAND_DESCRIPTION_BORDER: '更换岛屿边界颜色.'
 COMMAND_DESCRIPTION_CHEST: '打开岛屿仓库.'
@@ -495,6 +497,7 @@ ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&l结构 | &7你离得太远离了, 已自动
 ISLAND_PREVIEW_CANCEL: '&e&l结构 | &7你退出了预览模式.'
 ISLAND_PREVIEW_CONFIRM_TEXT: '确认'
 ISLAND_PREVIEW_CANCEL_TEXT: '取消'
+ISLAND_PREVIEW_SET: '&e&lPreview | &7Successfully updated the preview location for {0} schematic to {1}.'
 ISLAND_PREVIEW_START: |
   &e&l结构 | &7你正在预览结构 {0}.
   &e&l结构 | &7输入 &a&lCONFIRM &7来创建一个新岛屿, 或 &c&lCANCEL &7取消预览模式.
@@ -738,6 +741,7 @@ UNSAFE_WARP: '&e&l岛屿 | &7&o看起来该传送点不安全. 请尝试使用�
 UPDATED_PERMISSION: '&e&l岛屿 | &7更新了 {0} 的权限.'
 UPDATED_SETTINGS: '&e&l岛屿 | &7更新了岛屿设置 {0}.'
 UPGRADE_COOLDOWN_FORMAT: '&c&l错误 | &7你只能在 {0} 之后才可继续进行升级操作.'
+VAULT_NOT_INSTALLED: '&c&lError | &7Server doesn''t have vault installed so transactions are disabled.'
 VISITOR_BLOCK_COMMAND: '&c&l错误 | &7你不能对其他岛屿使用该命令.'
 WARP_ALREADY_EXIST: '&c&l错误 | &7已存在同名传送点.'
 WARP_CATEGORY_ICON_NEW_LORE: |

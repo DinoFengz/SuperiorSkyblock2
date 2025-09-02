@@ -235,6 +235,7 @@ COMMAND_DESCRIPTION_ADMIN_SET_CROP_GROWTH: Đặt hệ số tăng trưởng cây
 COMMAND_DESCRIPTION_ADMIN_SET_DISBANDS: Đặt số lượng người cho đảo của người chơi.
 COMMAND_DESCRIPTION_ADMIN_SET_EFFECT: 'Đặt hiệu ứng đảo của người chơi khác.'
 COMMAND_DESCRIPTION_ADMIN_SET_ENTITY_LIMIT: Đặt giới hạn vật thể của người chơi khác.
+COMMAND_DESCRIPTION_ADMIN_SET_ISLAND_PREVIEW: 'Set the preview location for an island.'
 COMMAND_DESCRIPTION_ADMIN_SET_LEADER: Chuyển một hòn đảo cho người khác.
 COMMAND_DESCRIPTION_ADMIN_SET_MOB_DROPS: Đặt số lượng vật phẩm quái rớt cho đảo của người chơi
   khác.
@@ -270,6 +271,7 @@ COMMAND_DESCRIPTION_ADMIN_WITHDRAW: Rút tiền từ ngân hàng đảo của ng
 COMMAND_DESCRIPTION_BALANCE: 'Kiểm tra số tiền bên trong ngân hàng của một hòn đảo.'
 COMMAND_DESCRIPTION_BAN: Cấm một người chơi từ đảo của bạn.
 COMMAND_DESCRIPTION_BANK: 'Mở ngân hàng đảo.'
+COMMAND_DESCRIPTION_BANS: 'Open the bans menu.'
 COMMAND_DESCRIPTION_BIOME: Thẩy đổi quần xã của hòn đảo.
 COMMAND_DESCRIPTION_BORDER: Thay đổi màu giới hạn đảo.
 COMMAND_DESCRIPTION_CHEST: 'Mở rương đảo.'
@@ -551,6 +553,7 @@ ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&lXem Trước | &7Bạn đã đi ra quá xa 
 ISLAND_PREVIEW_CANCEL: '&e&lXem Trước | &7Bạn đã hủy chế độ xem trước.'
 ISLAND_PREVIEW_CONFIRM_TEXT: 'DONG-Y'
 ISLAND_PREVIEW_CANCEL_TEXT: 'HUY-BO'
+ISLAND_PREVIEW_SET: '&e&lPreview | &7Successfully updated the preview location for {0} schematic to {1}.'
 ISLAND_PREVIEW_START: |
   &e&lXem Trước | &7Bạn đã bắt đầu chế độ xem trước schematic {0}.
   &e&lXem Trước | &7Nhập &a&lDONG-Y &7để tạo đảo mới, hoặc &c&lHUY-BO &7để dừng chế độ xem trước.
@@ -836,6 +839,7 @@ UNSAFE_WARP: '&e&lĐảo | &7&oCó vẻ như khu vực này không an toàn. Vui
 UPDATED_PERMISSION: '&e&lĐảo | &7Đã cập nhật quyền cho {0}.'
 UPDATED_SETTINGS: '&e&lĐảo | &7Thay đổi thành công điều chỉnh của đảo {0}.'
 UPGRADE_COOLDOWN_FORMAT: '&c&lLỗi | &77Bạn có thể nâng cấp lại trong {0}.'
+VAULT_NOT_INSTALLED: '&c&lError | &7Server doesn''t have vault installed so transactions are disabled.'
 VISITOR_BLOCK_COMMAND: '&c&lLỗi | &7Bạn không thể sử dụng lệnh này trên đảo khác.'
 WARP_ALREADY_EXIST: '&c&lLỗi | &7Đã có một khu vực đã được đặt với tên này.'
 WARP_CATEGORY_ICON_NEW_LORE: |
