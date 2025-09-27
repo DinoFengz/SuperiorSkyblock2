@@ -117,9 +117,9 @@ CHANGED_MOB_DROPS_ALL: '&e&lYükseltmeler | &7Tüm adaların mob düşürme çar
   güncellendi.'
 CHANGED_MOB_DROPS_NAME: '&e&lYükseltmeler | &7{0} adasının mob düşürme çarpanı başarıyla
   güncellendi.'
-CHANGED_NAME: '&e&lAda | &7Adanın adını {0} olarak değiştirdin.'
-CHANGED_NAME_OTHER: '&e&lAda | &7{0} adasının adını {1} olarak değiştirdin.'
-CHANGED_NAME_OTHER_NAME: '&e&lAda | &7{0} adının adını {1} olarak değiştirdin.'
+CHANGED_NAME: '&e&lAda | &7Adanın adını {0}&7 olarak değiştirdin.'
+CHANGED_NAME_OTHER: '&e&lAda | &7{0} adasının adını {1}&7 olarak değiştirdin.'
+CHANGED_NAME_OTHER_NAME: '&e&lAda | &7{0}&7 adının adını {1}&7 olarak değiştirdin.'
 CHANGED_PAYPAL: '&e&lAda | &7Ada paypalı başarıyla {0} olarak değiştirildi.'
 CHANGED_ROLE_LIMIT: '&e&lYükseltmeler | &7{0} rolünün {1}''in adası için limiti başarıyla
   güncellendi.'
@@ -229,6 +229,7 @@ COMMAND_DESCRIPTION_ADMIN_DEL_WARP: Bir ada için bir ışınlanma noktasını s
 COMMAND_DESCRIPTION_ADMIN_DEMOTE: Başka bir oyuncunun adasındaki bir üyeyi rütbe düşür.
 COMMAND_DESCRIPTION_ADMIN_DEPOSIT: Başka bir oyuncunun ada bankasına para yatır.
 COMMAND_DESCRIPTION_ADMIN_DISBAND: Başka bir oyuncunun adasını kalıcı olarak dağıt.
+COMMAND_DESCRIPTION_ADMIN_FLY: 'Toggle island fly for a player.'
 COMMAND_DESCRIPTION_ADMIN_GIVE_DISBANDS: Bir oyuncuya ada dağıtma hakkı ver.
 COMMAND_DESCRIPTION_ADMIN_IGNORE: En iyi adalardan bir adayı yoksay.
 COMMAND_DESCRIPTION_ADMIN_JOIN: Davet olmadan bir adaya katıl.
@@ -248,8 +249,11 @@ COMMAND_DESCRIPTION_ADMIN_RECALC: Bir adanın değerini yeniden hesapla.
 COMMAND_DESCRIPTION_ADMIN_RELOAD: Eklentinin tüm yapılandırmalarını ve görevlerini
   yeniden yükle.
 COMMAND_DESCRIPTION_ADMIN_REMOVE_BLOCK_LIMIT: Bir adadan blok limitini kaldır.
+COMMAND_DESCRIPTION_ADMIN_REMOVE_ENTITY_LIMIT: 'Remove an entity limit from an island.'
 COMMAND_DESCRIPTION_ADMIN_REMOVE_RATINGS: Bir oyuncu tarafından verilen tüm değerlendirmeleri
   kaldır.
+COMMAND_DESCRIPTION_ADMIN_RESET_PERMISSIONS: 'Reset all island permissions for a specific island.'
+COMMAND_DESCRIPTION_ADMIN_RESET_SETTINGS: 'Reset all island settings for a specific island.'
 COMMAND_DESCRIPTION_ADMIN_RESET_WORLD: Bir ada için bir dünyayı sıfırla.
 COMMAND_DESCRIPTION_ADMIN_SCHEMATIC: Eklenti için şematikler oluştur.
 COMMAND_DESCRIPTION_ADMIN_SET_BANK_LIMIT: Bir adaya banka limiti belirle.
@@ -579,9 +583,12 @@ ISLAND_INFO_RATE_FIVE_COLOR: '&2'
 ISLAND_INFO_ROLES: |
   &e&lAda | &7{0}lar:
   {1}
-ISLAND_INFO_VISITORS_COUNT: '&e&lAda | &7Ziyaretçi Sayısı: {0}'
+ISLAND_INFO_VISITORS_COUNT: '&e&lAda | &7Ziyaretçi Sayısı: {0} ({1} unique visitors)'
 ISLAND_INFO_WORTH: '&e&lAda | &7Değer: {0}'
+ISLAND_NAME_NONE: None
 ISLAND_OPENED: '&e&lAda | &7Ada başarıyla halka açıldı.'
+ISLAND_OWNER_NONE: None
+ISLAND_PREVIEW_BLOCK_COMMAND: '&c&lError | &7You cannot use that command in preview mode.'
 ISLAND_PREVIEW_CANCEL_DISTANCE: '&e&lÖnizleme | &7Çok uzaklaştın ve artık önizleme
   modunda değilsin.'
 ISLAND_PREVIEW_CANCEL: '&e&lÖnizleme | &7Önizleme modunu iptal ettin.'
@@ -664,12 +671,14 @@ MODULE_UNLOADED_SUCCESS: '&e&lModül | &7Modül başarıyla kaldırıldı.'
 MODULES_LIST: '&fModüller ({0}): {1}'
 MODULES_LIST_MODULE_NAME: '&a{0}'
 MODULES_LIST_SEPARATOR: '&f, '
-NAME_ANNOUNCEMENT: '&e&lAda | &7{0} adasının adını {1} olarak değiştirdi.'
+NAME_ANNOUNCEMENT: '&e&lAda | &7{0} adasının adını {1}&7 olarak değiştirdi.'
+NAME_ANNOUNCEMENT_OTHER: '&e&lIsland | &7{0} changed the {1} island''s name to {2}&7.'
+NAME_ANNOUNCEMENT_OTHER_NAME: '&e&lIsland | &7{0} changed the name of {1}&7 to {2}&7.'
 NAME_BLACKLISTED: '&c&lHata | &7Bu adı kullanamazsın.'
 NAME_CHAT_FORMAT: '&8[&e{0}&8] &r'
 NAME_SAME_AS_PLAYER: '&c&lHata | &7Oyuncu adlarını ada adı olarak kullanamazsın.'
-NAME_TOO_LONG: '&c&lHata | &7Ada adları 16 karakterden uzun olamaz.'
-NAME_TOO_SHORT: '&c&lHata | &7Ada adları 3 karakterden kısa olamaz.'
+NAME_TOO_LONG: '&c&lHata | &7Ada adları {0} karakterden uzun olamaz.'
+NAME_TOO_SHORT: '&c&lHata | &7Ada adları {0} karakterden kısa olamaz.'
 NO_BAN_PERMISSION: '&c&lHata | &7Oyuncuları yasaklayabilmek için en az {0} olmalısın.'
 NO_CLOSE_BYPASS: '&c&lHata | &7Bu ada halka açık değil.'
 NO_CLOSE_PERMISSION: '&c&lHata | &7Adanı halka kapatabilmek için en az {0} olmalısın.'
@@ -742,6 +751,9 @@ PERSISTENT_DATA_SHOW_PATH: '&b{0}&f: '
 PERSISTENT_DATA_SHOW_SPACER: '&f, '
 PERSISTENT_DATA_SHOW_VALUE: '&6{0}&c{1}&f'
 PERSISTENT_DATA_REMOVED: '&e&lVeri | &7{0} için {1} yolundan veri başarıyla kaldırıldı.'
+PERMISSIONS_RESET: '&e&lIsland | &7Successfully reset all the permissions of {0}''s island to default values!'
+PERMISSIONS_RESET_ALL: '&e&lIsland | &7Successfully reset all the permissions of all the islands to default values!'
+PERMISSIONS_RESET_NAME: '&e&lIsland | &7Successfully reset all the permissions of the island {0} to default values!'
 PERMISSIONS_RESET_PLAYER: '&e&lAda | &7{0} için tüm izinler varsayılan değerlere başarıyla
   sıfırlandı!'
 PERMISSIONS_RESET_ROLES: '&e&lAda | &7Adanın tüm izinleri varsayılan değerlere başarıyla
@@ -844,6 +856,8 @@ TOGGLED_BYPASS_OFF: '&e&lBypass | &7Bypass modu &cKAPALI&7.'
 TOGGLED_BYPASS_ON: '&e&lBypass | &7Bypass modu &aAÇIK&7.'
 TOGGLED_FLY_OFF: '&e&lUçuş | &7Ada uçuşu &cKAPALI&7.'
 TOGGLED_FLY_ON: '&e&lUçuş | &7Ada uçuşu &aAÇIK&7.'
+TOGGLED_FLY_OFF_OTHER: '&e&lFly | &7Toggled island fly &cOFF&7 for {0}.'
+TOGGLED_FLY_ON_OTHER: '&e&lFly | &7Toggled island fly &aON&7 for {0}.'
 TOGGLED_SCHEMATIC_OFF: '&e&lŞematikler | &7Şematik modu &cKAPALI&7.'
 TOGGLED_SCHEMATIC_ON: |-
   &e&lŞematikler | &7Şematik modu &aAÇIK&7.

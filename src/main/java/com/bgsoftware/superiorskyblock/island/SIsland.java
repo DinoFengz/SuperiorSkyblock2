@@ -22,6 +22,7 @@ import com.bgsoftware.superiorskyblock.api.island.algorithms.IslandBlocksTracker
 import com.bgsoftware.superiorskyblock.api.island.algorithms.IslandCalculationAlgorithm;
 import com.bgsoftware.superiorskyblock.api.island.algorithms.IslandEntitiesTrackerAlgorithm;
 import com.bgsoftware.superiorskyblock.api.island.bank.IslandBank;
+import com.bgsoftware.superiorskyblock.api.island.cache.IslandCache;
 import com.bgsoftware.superiorskyblock.api.island.warps.IslandWarp;
 import com.bgsoftware.superiorskyblock.api.island.warps.WarpCategory;
 import com.bgsoftware.superiorskyblock.api.key.Key;
@@ -80,6 +81,7 @@ import com.bgsoftware.superiorskyblock.core.value.IntValue;
 import com.bgsoftware.superiorskyblock.core.value.Value;
 import com.bgsoftware.superiorskyblock.core.values.BlockValue;
 import com.bgsoftware.superiorskyblock.island.builder.IslandBuilderImpl;
+import com.bgsoftware.superiorskyblock.island.cache.IslandCacheImpl;
 import com.bgsoftware.superiorskyblock.island.chunk.DirtyChunksContainer;
 import com.bgsoftware.superiorskyblock.island.flag.IslandFlags;
 import com.bgsoftware.superiorskyblock.island.privilege.IslandPrivileges;
@@ -179,7 +181,14 @@ public class SIsland implements Island {
     private final IslandEntitiesTrackerAlgorithm entitiesTracker;
     private final Synchronized<BukkitTask> bankInterestTask = Synchronized.of(null);
     private final DirtyChunksContainer dirtyChunksContainer;
-
+    private final LazyReference<IslandCache> islandCache = new LazyReference<IslandCache>() {
+        @Override
+        protected IslandCache create() {
+            return new IslandCacheImpl(SIsland.this);
+        }
+    };
+    private final IslandArea entireArea = new IslandArea();
+    private final IslandArea protectedArea = new IslandArea();
     /*
      * Island Identifiers
      */
@@ -260,8 +269,8 @@ public class SIsland implements Island {
     private volatile String paypal;
     private volatile boolean isLocked;
     private volatile boolean isTopIslandsIgnored;
-    private volatile String islandName;
-    private volatile String islandRawName;
+    private volatile String formattedName;
+    private volatile String strippedName;
     private volatile String description;
     private volatile Biome biome = null;
 
@@ -276,8 +285,7 @@ public class SIsland implements Island {
 
         this.center = new SBlockPosition(builder.center);
         this.creationTime = builder.creationTime;
-        this.islandName = builder.islandName;
-        this.islandRawName = Formatters.STRIP_COLOR_FORMATTER.format(this.islandName);
+        setNameInternal(builder.islandName);
         this.schematicName = builder.islandType;
         this.discord = builder.discord;
         this.paypal = builder.paypal;
@@ -367,6 +375,11 @@ public class SIsland implements Island {
             loadIslandWarp(warpRecord.name, warpRecord.location, warpCategory, warpRecord.isPrivate, warpRecord.icon);
         });
 
+        int islandDistance = (int) Math.round(plugin.getSettings().getMaxIslandSize() *
+                (plugin.getSettings().isBuildOutsideIsland() ? 1.5 : 1D));
+        this.entireArea.update(this.center, islandDistance);
+        this.protectedArea.update(this.center, getIslandSize());
+
         // We want to save all the limits to the custom block keys
         plugin.getBlockValues().addCustomBlockKeys(builder.blockLimits.keySet());
 
@@ -437,6 +450,11 @@ public class SIsland implements Island {
     @Override
     public void updateDatesFormatter() {
         this.creationTimeDate = Formatters.DATE_FORMATTER.format(new Date(creationTime * 1000));
+    }
+
+    @Override
+    public IslandCache getCache() {
+        return this.islandCache.get();
     }
 
     @Override
@@ -712,8 +730,11 @@ public class SIsland implements Island {
 
         boolean coopPlayer = coopPlayers.add(superiorPlayer);
 
-        if (coopPlayer)
-            plugin.getMenus().refreshCoops(this);
+        if (!coopPlayer)
+            return;
+
+        superiorPlayer.addCoop(this);
+        plugin.getMenus().refreshCoops(this);
     }
 
     @Override
@@ -727,6 +748,8 @@ public class SIsland implements Island {
         // This player was not coop.
         if (!uncoopPlayer)
             return;
+
+        superiorPlayer.removeCoop(this);
 
         superiorPlayer.runIfOnline(player -> {
             try (ObjectsPools.Wrapper<Location> wrapper = ObjectsPools.LOCATION.obtain()) {
@@ -898,12 +921,7 @@ public class SIsland implements Island {
         if (islandHome == null)
             return null;
 
-        World world = plugin.getGrid().getIslandsWorld(this, dimension);
-
-        islandHome = islandHome.clone();
-        islandHome.setWorld(world);
-
-        return islandHome;
+        return IslandWorlds.setWorldToLocation(this, dimension, islandHome);
     }
 
     @Override
@@ -985,10 +1003,7 @@ public class SIsland implements Island {
         if (adjustLocationToCenterOfBlock(visitorsLocation))
             IslandsDatabaseBridge.saveVisitorLocation(this, defaultWorldDimension, visitorsLocation);
 
-        World world = plugin.getGrid().getIslandsWorld(this, defaultWorldDimension);
-        visitorsLocation.setWorld(world);
-
-        return visitorsLocation.clone();
+        return IslandWorlds.setWorldToLocation(this, defaultWorldDimension, visitorsLocation);
     }
 
     @Override
@@ -1421,13 +1436,7 @@ public class SIsland implements Island {
         if (!isIslandWorld(location.getWorld()))
             return false;
 
-        int islandDistance = (int) Math.round(plugin.getSettings().getMaxIslandSize() *
-                (plugin.getSettings().isBuildOutsideIsland() ? 1.5 : 1D));
-
-        try (IslandArea islandArea = IslandArea.of(this.center, islandDistance)) {
-            islandArea.expand(extraRadius);
-            return islandArea.intercepts(location.getBlockX(), location.getBlockZ());
-        }
+        return this.entireArea.expandAndIntercepts(location.getBlockX(), location.getBlockZ(), extraRadius);
     }
 
     @Override
@@ -1443,13 +1452,7 @@ public class SIsland implements Island {
     }
 
     private boolean isChunkInside(int chunkX, int chunkZ) {
-        int islandDistance = (int) Math.round(plugin.getSettings().getMaxIslandSize() *
-                (plugin.getSettings().isBuildOutsideIsland() ? 1.5 : 1D));
-
-        try (IslandArea islandArea = IslandArea.of(this.center, islandDistance)) {
-            islandArea.rshift(4);
-            return islandArea.intercepts(chunkX, chunkZ);
-        }
+        return this.entireArea.rshiftAndIntercepts(chunkX, chunkZ, 4);
     }
 
     @Override
@@ -1470,10 +1473,7 @@ public class SIsland implements Island {
         if (!isIslandWorld(location.getWorld()))
             return false;
 
-        try (IslandArea islandArea = IslandArea.of(this.center, getIslandSize())) {
-            islandArea.expand(extraRadius);
-            return islandArea.intercepts(location.getBlockX(), location.getBlockZ());
-        }
+        return this.protectedArea.expandAndIntercepts(location.getBlockX(), location.getBlockZ(), extraRadius);
     }
 
     @Override
@@ -1483,10 +1483,7 @@ public class SIsland implements Island {
         if (!isIslandWorld(chunk.getWorld()))
             return false;
 
-        try (IslandArea islandArea = IslandArea.of(this.center, getIslandSize())) {
-            islandArea.rshift(4);
-            return islandArea.intercepts(chunk.getX(), chunk.getZ());
-        }
+        return this.protectedArea.rshiftAndIntercepts(chunk.getX(), chunk.getZ(), 4);
     }
 
     private static boolean isIslandWorld(@Nullable World world) {
@@ -1737,27 +1734,47 @@ public class SIsland implements Island {
 
     @Override
     public String getName() {
-        return plugin.getSettings().getIslandNames().isColorSupport() ? islandName : islandRawName;
+        return plugin.getSettings().getIslandNames().isColorSupport() ? getFormattedName() : getStrippedName();
     }
 
     @Override
     public void setName(String islandName) {
         Preconditions.checkNotNull(islandName, "islandName parameter cannot be null.");
 
-        Log.debug(Debug.SET_NAME, owner.getName(), islandName);
+        String strippedName = Formatters.STRIP_COLOR_FORMATTER.format(islandName);
 
-        if (Objects.equals(islandName, this.islandName))
+        Log.debug(Debug.SET_NAME, owner.getName(), strippedName);
+
+        String oldName = this.strippedName;
+
+        setNameInternal(islandName);
+
+        if (Objects.equals(strippedName, oldName))
             return;
 
-        this.islandName = islandName;
-        this.islandRawName = Formatters.STRIP_COLOR_FORMATTER.format(this.islandName);
+        plugin.getGrid().getIslandsContainer().updateIslandName(this, oldName);
 
         IslandsDatabaseBridge.saveName(this);
     }
 
+    private void setNameInternal(String name) {
+        this.formattedName = Formatters.COLOR_FORMATTER.format(name);
+        this.strippedName = Formatters.STRIP_COLOR_FORMATTER.format(name);
+    }
+
     @Override
     public String getRawName() {
-        return islandRawName;
+        return getStrippedName();
+    }
+
+    @Override
+    public String getStrippedName() {
+        return this.strippedName;
+    }
+
+    @Override
+    public String getFormattedName() {
+        return this.formattedName;
     }
 
     @Override
@@ -1801,6 +1818,7 @@ public class SIsland implements Island {
         });
 
         invitedPlayers.forEach(invitedPlayer -> invitedPlayer.removeInvite(this));
+        coopPlayers.forEach(coopPlayer -> coopPlayer.removeCoop(this));
 
         if (BuiltinModules.BANK.getConfiguration().hasDisbandRefund()) {
             BigDecimal disbandRefund = BuiltinModules.BANK.getConfiguration().getDisbandRefund();
@@ -1972,6 +1990,8 @@ public class SIsland implements Island {
                 newChunks.forEach(chunk -> plugin.getNMSChunks().startTickingChunk(this, chunk, false));
             });
         }
+
+        this.protectedArea.update(this.center, getIslandSize());
 
         updateBorder();
     }
@@ -3292,6 +3312,20 @@ public class SIsland implements Island {
             return;
 
         IslandsDatabaseBridge.saveEntityLimit(this, key, limit);
+    }
+
+    @Override
+    public void removeEntityLimit(Key key) {
+        Preconditions.checkNotNull(key, "key parameter cannot be null.");
+
+        Log.debug(Debug.REMOVE_ENTITY_LIMIT, owner.getName(), key);
+
+        IntValue oldEntityLimit = entityLimits.remove(key);
+
+        if (oldEntityLimit == null)
+            return;
+
+        IslandsDatabaseBridge.removeEntityLimit(this, key);
     }
 
     @Override

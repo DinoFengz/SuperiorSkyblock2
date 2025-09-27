@@ -60,6 +60,14 @@ public class PluginEventsFactory {
         fireEvent(COMMANDS_UPDATE_EVENT, Empty.INSTANCE);
     }
 
+    public static void callSpawnUpdateEvent() {
+        fireEvent(SPAWN_UPDATE_EVENT, Empty.INSTANCE);
+    }
+
+    public static void callWorldsProviderUpdateEvent() {
+        fireEvent(WORLD_PROVIDER_UPDATE_EVENT, Empty.INSTANCE);
+    }
+
     public static boolean callAttemptPlayerSendMessageEvent(SuperiorPlayer receiver, String messageType, Object... args) {
         AttemptPlayerSendMessage attemptPlayerSendMessage = new AttemptPlayerSendMessage();
         attemptPlayerSendMessage.receiver = receiver;
@@ -476,6 +484,10 @@ public class PluginEventsFactory {
         return !fireEvent(ISLAND_CLEAR_RATINGS_EVENT, islandClearRatings).isCancelled();
     }
 
+    public static boolean callIslandClearRolesPrivilegesEvent(Island island, CommandSender commandSender) {
+        return callIslandClearRolesPrivilegesEvent(island, commandSenderToSuperiorPlayer(commandSender));
+    }
+
     public static boolean callIslandClearRolesPrivilegesEvent(Island island, SuperiorPlayer superiorPlayer) {
         IslandClearRolesPrivileges islandClearRolesPrivileges = new IslandClearRolesPrivileges();
         islandClearRolesPrivileges.island = island;
@@ -624,6 +636,14 @@ public class PluginEventsFactory {
         return fireEvent(ISLAND_GENERATE_BLOCK_EVENT, islandGenerateBlock);
     }
 
+    public static boolean callIslandHomeTeleportEvent(Island island, SuperiorPlayer superiorPlayer, Dimension dimension) {
+        IslandHomeTeleport islandHomeTeleport = new IslandHomeTeleport();
+        islandHomeTeleport.island = island;
+        islandHomeTeleport.superiorPlayer = superiorPlayer;
+        islandHomeTeleport.dimension = dimension;
+        return !fireEvent(ISLAND_HOME_TELEPORT_EVENT, islandHomeTeleport).isCancelled();
+    }
+
     public static boolean callIslandInviteEvent(Island island, SuperiorPlayer superiorPlayer, SuperiorPlayer targetPlayer) {
         IslandInvite islandInvite = new IslandInvite();
         islandInvite.island = island;
@@ -741,6 +761,18 @@ public class PluginEventsFactory {
         islandRemoveEffect.superiorPlayer = superiorPlayer;
         islandRemoveEffect.effectType = effectType;
         return !fireEvent(ISLAND_REMOVE_EFFECT_EVENT, islandRemoveEffect).isCancelled();
+    }
+
+    public static boolean callIslandRemoveEntityLimitEvent(Island island, CommandSender commandSender, Key entity) {
+        return callIslandRemoveEntityLimitEvent(island, commandSenderToSuperiorPlayer(commandSender), entity);
+    }
+
+    public static boolean callIslandRemoveEntityLimitEvent(Island island, @Nullable SuperiorPlayer superiorPlayer, Key entity) {
+        IslandRemoveEntityLimit islandRemoveEntityLimit = new IslandRemoveEntityLimit();
+        islandRemoveEntityLimit.island = island;
+        islandRemoveEntityLimit.superiorPlayer = superiorPlayer;
+        islandRemoveEntityLimit.entity = entity;
+        return !fireEvent(ISLAND_REMOVE_ENTITY_LIMIT_EVENT, islandRemoveEntityLimit).isCancelled();
     }
 
     public static boolean callIslandRemoveGeneratorRateEvent(Island island, CommandSender commandSender, Key block, Dimension dimension) {
@@ -930,6 +962,14 @@ public class PluginEventsFactory {
         islandUpgrade.upgradeCause = upgradeCause;
         islandUpgrade.upgradeCost = upgradeCost;
         return fireEvent(ISLAND_UPGRADE_EVENT, islandUpgrade);
+    }
+
+    public static boolean callIslandVisitorHomeTeleportEvent(Island island, SuperiorPlayer superiorPlayer, Dimension dimension) {
+        IslandVisitorHomeTeleport islandVisitorHomeTeleport = new IslandVisitorHomeTeleport();
+        islandVisitorHomeTeleport.island = island;
+        islandVisitorHomeTeleport.superiorPlayer = superiorPlayer;
+        islandVisitorHomeTeleport.dimension = dimension;
+        return !fireEvent(ISLAND_VISITOR_HOME_TELEPORT_EVENT, islandVisitorHomeTeleport).isCancelled();
     }
 
     public static boolean callIslandWarpTeleportEvent(Island island, SuperiorPlayer superiorPlayer, IslandWarp islandWarp) {

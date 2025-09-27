@@ -257,6 +257,7 @@ island-roles:
         - MONSTER_SPAWN
         - RANKUP
         - SPAWNER_BREAK
+        - TAMED_ANIMAL_DAMAGE
     mod:
       id: 1
       name: 'Moderator'
@@ -386,8 +387,8 @@ spawn:
   location: SuperiorWorld, 0, 100, 0, 0, 0
 
   # Should the spawn be protected?
-  # When disabled, it's your responsibility to protect the spawn!
-  # Therefore, settings will be still applied to the area if false.
+  # When set to false, settings and permissions will not be applied to the spawn region.
+  # In that case, it is your own responsibility to protect the spawn region.
   protection: true
 
   # A list of settings that will be enabled for the spawn.
@@ -511,17 +512,17 @@ clear-on-disband:
 # List of clear actions to perform on players when they accept an invite.
 # Available actions: EFFECTS, ENDER_CHEST, EXPERIENCE, HEALTH, HUNGER, INVENTORY
 # You can disable this feature by setting the section to 'clear-on-join: []'
-clear-on-join: []
+clear-on-join: [ ]
 
 # List of clear actions to perform on players when they are kicked from their island.
 # Available actions: EFFECTS, ENDER_CHEST, EXPERIENCE, HEALTH, HUNGER, INVENTORY
 # You can disable this feature by setting the section to 'clear-on-kick: []'
-clear-on-kick: []
+clear-on-kick: [ ]
 
 # List of clear actions to perform on players when they leave an island.
 # Available actions: EFFECTS, ENDER_CHEST, EXPERIENCE, HEALTH, HUNGER, INVENTORY
 # You can disable this feature by setting the section to 'clear-on-leave: []'
-clear-on-leave: []
+clear-on-leave: [ ]
 
 # Should players be able to rate their own islands?
 rate-own-island: false
@@ -670,7 +671,7 @@ liquid-update: false
 
 # Should lights get updated when pasting schematics?
 # Enabling this can drop performance a bit.
-lights-update: false
+lights-update: true
 
 # A list of worlds that PvP will be enabled between island members.
 pvp-worlds:
@@ -816,13 +817,25 @@ command-aliases:
 # These blocks require the "VALUABLE_BREAK" permission in order to break them.
 valuable-blocks: [ ]
 
-# Set preview locations for schematics.
-# You can disable this feature by setting the section to 'preview-islands: {}'
-# Make sure you follow the location format: '<world>, <x>, <y>, <z>'
-preview-islands:
-  normal: world, 0, 100, 0
-  mycel: world, 0, 100, 0
-  desert: world, 0, 100, 0
+# Settings related to the island previews.
+island-previews:
+  # The game mode that will be set for the player when they enter preview mode.
+  # Use ADVENTURE, CREATIVE, SPECTATOR or SURVIVAL.
+  game-mode: SPECTATOR
+
+  # The maximum distance a player can move before the preview mode is canceled.
+  max-distance: 100
+
+  # A list of commands that cannot be executed by players in preview mode.
+  blocked-commands: [ ]
+
+  # Preview locations for schematics.
+  # You can disable this feature by setting the section to 'locations: []'
+  # Make sure you follow the location format: '<world>, <x>, <y>, <z>, <pitch>, <yaw>'
+  locations:
+    normal: world, 0, 100, 0
+    mycel: world, 0, 100, 0
+    desert: world, 0, 100, 0
 
 # Should vanished players be hidden in tab completes?
 tab-complete-hide-vanished: true
@@ -905,3 +918,8 @@ chat-signing-support: true
 # Amount of commands to be listed in the `/is help` and `/is admin` commands.
 # Setting this to 0 or below will result all commands to be shown in a single page.
 commands-per-page: 7
+
+# Whether the plugin should cache schematics for faster placement of schematics.
+# This may consume more RAM usage, but will place schematics much faster.
+# This will only work if max-island-size is divisible by 4 with no remainder.
+cache-schematics: true

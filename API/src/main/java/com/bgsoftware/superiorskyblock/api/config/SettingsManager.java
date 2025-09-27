@@ -9,6 +9,7 @@ import com.bgsoftware.superiorskyblock.api.player.inventory.ClearAction;
 import com.bgsoftware.superiorskyblock.api.player.respawn.RespawnAction;
 import com.bgsoftware.superiorskyblock.api.world.Dimension;
 import com.bgsoftware.superiorskyblock.api.wrappers.BlockOffset;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -254,6 +255,7 @@ public interface SettingsManager {
      * Whether inventory of island members should be cleared when their island is disbanded or not.
      * Return true if clear-on-disband contains both ENDER_CHEST and INVENTORY.
      * This method will be deleted in the future!
+     *
      * @deprecated See {@link #getClearActionsOnDisband()}
      */
     @Deprecated
@@ -293,6 +295,7 @@ public interface SettingsManager {
      * Whether to clear players' inventories when they join a new island or not.
      * Return true if clear-on-join contains both ENDER_CHEST and INVENTORY.
      * This method will be deleted in the future!
+     *
      * @deprecated See {@link #getClearActionsOnJoin()}
      */
     @Deprecated
@@ -608,8 +611,17 @@ public interface SettingsManager {
      * List of preview-island locations.
      * Represented by a map with keys as schematic names, and values as locations for the preview islands.
      * Config-path: preview-islands
+     *
+     * @deprecated See {@link #getIslandPreviews()}
      */
+    @Deprecated
     Map<String, Location> getPreviewIslands();
+
+    /**
+     * All settings related to the island previews.
+     * Config path: island-previews
+     */
+    IslandPreviews getIslandPreviews();
 
     /**
      * Whether vanished players should be hidden from command tab completes or not.
@@ -720,6 +732,12 @@ public interface SettingsManager {
      * Config-path: commands-per-page
      */
     int getCommandsPerPage();
+
+    /**
+     * Whether the plugin should cache schematics for faster placement of schematics.
+     * Config-path: cache-schematics
+     */
+    boolean isCacheSchematics();
 
     interface Database {
 
@@ -1281,5 +1299,33 @@ public interface SettingsManager {
 
     }
 
+    interface IslandPreviews {
+
+        /**
+         * The game mode that will be set for the player when they enter preview mode.
+         * Config-path: island-previews.game-mode
+         */
+        GameMode getGameMode();
+
+        /**
+         * The maximum distance a player can move before the preview mode is canceled.
+         * Config-path: island-previews.max-distance
+         */
+        int getMaxDistance();
+
+        /**
+         * A list of commands that cannot be executed by players in preview mode.
+         * Config-path: island-previews.blocked-commands
+         */
+        List<String> getBlockedCommands();
+
+        /**
+         * List of island preview locations.
+         * Represented by a map with keys as schematic names, and values as locations for the preview islands.
+         * Config-path: island-previews.locations
+         */
+        Map<String, Location> getLocations();
+
+    }
 
 }

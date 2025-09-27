@@ -7,7 +7,6 @@ import com.bgsoftware.superiorskyblock.api.objects.Pair;
 import com.bgsoftware.superiorskyblock.api.player.inventory.ClearAction;
 import com.bgsoftware.superiorskyblock.api.player.respawn.RespawnAction;
 import com.bgsoftware.superiorskyblock.config.SettingsContainerHolder;
-import org.bukkit.Location;
 
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -334,10 +333,6 @@ public class GlobalSection extends SettingsContainerHolder {
         return getContainer().valuableBlocks;
     }
 
-    public Map<String, Location> getPreviewIslands() {
-        return getContainer().islandPreviewLocations;
-    }
-
     public boolean isTabCompleteHideVanished() {
         return getContainer().tabCompleteHideVanished;
     }
@@ -408,6 +403,10 @@ public class GlobalSection extends SettingsContainerHolder {
 
     public int getCommandsPerPage() {
         return getContainer().commandsPerPage;
+    }
+
+    public boolean isCacheSchematics() {
+        return getContainer().cacheSchematics;
     }
 
 }

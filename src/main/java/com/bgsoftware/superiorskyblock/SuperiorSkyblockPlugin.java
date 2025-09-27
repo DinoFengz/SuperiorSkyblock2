@@ -45,6 +45,7 @@ import com.bgsoftware.superiorskyblock.core.values.BlockValuesManagerImpl;
 import com.bgsoftware.superiorskyblock.core.values.container.BlockValuesContainer;
 import com.bgsoftware.superiorskyblock.external.ProvidersManagerImpl;
 import com.bgsoftware.superiorskyblock.island.GridManagerImpl;
+import com.bgsoftware.superiorskyblock.island.cache.IslandCacheKeys;
 import com.bgsoftware.superiorskyblock.island.container.DefaultIslandsContainer;
 import com.bgsoftware.superiorskyblock.island.flag.IslandFlags;
 import com.bgsoftware.superiorskyblock.island.preview.DefaultIslandPreviews;
@@ -182,6 +183,7 @@ public class SuperiorSkyblockPlugin extends JavaPlugin implements SuperiorSkyblo
         ClearActions.registerActions();
         RespawnActions.registerActions();
         Dimensions.registerDimensions();
+        IslandCacheKeys.registerCacheKeys();
 
         try {
             SortingComparators.initializeTopIslandMembersSorting();
@@ -339,7 +341,6 @@ public class SuperiorSkyblockPlugin extends JavaPlugin implements SuperiorSkyblo
 
                 playersHandler.savePlayers();
                 gridHandler.saveIslands();
-                stackedBlocksHandler.saveStackedBlocks();
             }
 
             if (loadingStage.isAtLeast(PluginLoadingStage.MODULES_INITIALIZED)) {
@@ -482,6 +483,8 @@ public class SuperiorSkyblockPlugin extends JavaPlugin implements SuperiorSkyblo
             dataHandler.loadData();
             stackedBlocksHandler.loadData();
         }
+
+        BukkitExecutor.sync(schematicsHandler::cacheSchematics);
 
         modulesHandler.runModuleLifecycle(ModuleLoadTime.AFTER_MODULE_DATA_LOAD, reloadReason == PluginReloadReason.COMMAND);
 

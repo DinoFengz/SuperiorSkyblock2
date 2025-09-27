@@ -35,6 +35,7 @@ import com.bgsoftware.superiorskyblock.core.values.BlockValuesManagerImpl;
 import com.bgsoftware.superiorskyblock.tag.CompoundTag;
 import com.bgsoftware.superiorskyblock.tag.ListTag;
 import com.bgsoftware.superiorskyblock.world.Dimensions;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -209,7 +210,10 @@ public class SettingsContainer {
     public final int islandChestsDefaultSize;
     public final Map<String, List<String>> commandAliases;
     public final KeySet valuableBlocks;
-    public final Map<String, Location> islandPreviewLocations;
+    public final GameMode islandPreviewsGameMode;
+    public final int islandPreviewsMaxDistance;
+    public final List<String> islandPreviewsBlockedCommands;
+    public final Map<String, Location> islandPreviewsLocations;
     public final boolean tabCompleteHideVanished;
     public final boolean dropsUpgradePlayersMultiply;
     public final long protectedMessageDelay;
@@ -228,6 +232,7 @@ public class SettingsContainer {
     public final BigInteger blockCountsSaveThreshold;
     public final boolean chatSigningSupport;
     public final int commandsPerPage;
+    public final boolean cacheSchematics;
 
     public SettingsContainer(SuperiorSkyblockPlugin plugin, YamlConfiguration config) throws ManagerLoadException {
         databaseType = config.getString("database.type").toUpperCase(Locale.ENGLISH);
@@ -493,7 +498,7 @@ public class SettingsContainer {
         homeWarmup = config.getLong("home-warmup", 0);
         visitWarmup = config.getLong("visit-warmup", 0);
         liquidUpdate = config.getBoolean("liquid-update", false);
-        lightsUpdate = config.getBoolean("lights-update", false);
+        lightsUpdate = config.getBoolean("lights-update", true);
         pvpWorlds = Collections.unmodifiableList(config.getStringList("pvp-worlds"));
         stopLeaving = config.getBoolean("stop-leaving", false);
         valuesMenu = config.getBoolean("values-menu", true);
@@ -531,18 +536,29 @@ public class SettingsContainer {
         this.commandAliases = Collections.unmodifiableMap(commandAliases);
         valuableBlocks = KeySets.unmodifiableKeySet(
                 KeySets.createHashSet(KeyIndicator.MATERIAL, config.getStringList("valuable-blocks")));
-        Map<String, Location> islandPreviewLocations = new HashMap<>();
-        if (config.isConfigurationSection("preview-islands")) {
-            for (String schematic : config.getConfigurationSection("preview-islands").getKeys(false)) {
+        GameMode islandPreviewsGameMode;
+        String islandPreviewsGameModeName = config.getString("island-previews.game-mode", "SPECTATOR").toUpperCase(Locale.ENGLISH);
+        try {
+            islandPreviewsGameMode = GameMode.valueOf(islandPreviewsGameModeName);
+        } catch (IllegalArgumentException error) {
+            islandPreviewsGameMode = GameMode.SPECTATOR;
+            Log.warnFromFile("config.yml", "Invalid game mode ", islandPreviewsGameModeName + ", using SPECTATOR instead.");
+        }
+        this.islandPreviewsGameMode = islandPreviewsGameMode;
+        islandPreviewsMaxDistance = config.getInt("island-previews.max-distance", 100);
+        islandPreviewsBlockedCommands = Collections.unmodifiableList(config.getStringList("island-previews.blocked-commands"));
+        Map<String, Location> islandPreviewsLocations = new HashMap<>();
+        if (config.isConfigurationSection("island-previews.locations")) {
+            for (String schematic : config.getConfigurationSection("island-previews.locations").getKeys(false)) {
                 try {
-                    islandPreviewLocations.put(schematic.toLowerCase(Locale.ENGLISH), Serializers.LOCATION_SERIALIZER
-                            .deserialize(config.getString("preview-islands." + schematic)));
+                    islandPreviewsLocations.put(schematic.toLowerCase(Locale.ENGLISH), Serializers.LOCATION_SERIALIZER
+                            .deserialize(config.getString("island-previews.locations." + schematic)));
                 } catch (Exception error) {
                     Log.warnFromFile("config.yml", "Cannot deserialize island preview for ", schematic, ", skipping...");
                 }
             }
         }
-        this.islandPreviewLocations = Collections.unmodifiableMap(islandPreviewLocations);
+        this.islandPreviewsLocations = Collections.unmodifiableMap(islandPreviewsLocations);
         tabCompleteHideVanished = config.getBoolean("tab-complete-hide-vanished", true);
         dropsUpgradePlayersMultiply = config.getBoolean("drops-upgrade-players-multiply", false);
         protectedMessageDelay = config.getLong("protected-message-delay", 60L);
@@ -571,6 +587,7 @@ public class SettingsContainer {
         blockCountsSaveThreshold = BigInteger.valueOf(config.getInt("block-counts-save-threshold", 100));
         chatSigningSupport = config.getBoolean("chat-signing-support", true);
         commandsPerPage = config.getInt("commands-per-page", 7);
+        cacheSchematics = config.getBoolean("cache-schematics", true);
     }
 
     private List<ClearAction> loadClearActions(List<String> clearActionsNames) {

@@ -209,6 +209,10 @@ public class StackedBlocksManagerImpl extends Manager implements StackedBlocksMa
         return Collections.unmodifiableMap(allStackedBlocks);
     }
 
+    public boolean hasStackedBlocks() {
+        return this.stackedBlocksContainer.size() > 0;
+    }
+
     @Override
     public void updateStackedBlockHologram(Location location) {
         Preconditions.checkNotNull(location, "location parameter cannot be null.");
@@ -262,21 +266,6 @@ public class StackedBlocksManagerImpl extends Manager implements StackedBlocksMa
 
     public void forEach(ChunkPosition chunkPosition, Consumer<StackedBlock> consumer) {
         this.stackedBlocksContainer.forEach(chunkPosition, consumer);
-    }
-
-    public void saveStackedBlocks() {
-        StackedBlocksDatabaseBridge.deleteStackedBlocks(this);
-
-        try {
-            databaseBridge.batchOperations(true);
-            this.stackedBlocksContainer.forEach(stackedBlock -> {
-                if (stackedBlock.getAmount() > 1) {
-                    StackedBlocksDatabaseBridge.saveStackedBlock(this, stackedBlock);
-                }
-            });
-        } finally {
-            databaseBridge.batchOperations(false);
-        }
     }
 
     private void loadStackedBlock(DatabaseResult resultSet) {

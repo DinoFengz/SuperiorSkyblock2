@@ -17,9 +17,9 @@ public class IslandWarpTeleportEvent extends IslandEvent implements Cancellable 
     /**
      * The constructor of the event.
      *
-     * @param island         The island that the player talks in.
-     * @param superiorPlayer The player who sent the message.
-     * @param islandWarp     The island warp the player teleports to.
+     * @param island         The island that the player teleports to.
+     * @param superiorPlayer The player who teleports to the island warp.
+     * @param islandWarp     The island warp that the player teleports to.
      */
     public IslandWarpTeleportEvent(Island island, SuperiorPlayer superiorPlayer, IslandWarp islandWarp) {
         super(island);
@@ -28,7 +28,7 @@ public class IslandWarpTeleportEvent extends IslandEvent implements Cancellable 
     }
 
     /**
-     * Get the player who banned the other player.
+     * Get the player who teleports to the island warp.
      */
     public SuperiorPlayer getPlayer() {
         return superiorPlayer;

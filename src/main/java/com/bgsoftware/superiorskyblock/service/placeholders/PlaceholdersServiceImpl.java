@@ -61,7 +61,7 @@ public class PlaceholdersServiceImpl implements PlaceholdersService, IService {
     private static final Pattern BLOCK_TOTAL_LEVEL_PLACEHOLDER_PATTERN = Pattern.compile("island_block_total_level_(.+)");
     private static final Pattern BLOCK_TOTAL_WORTH_PLACEHOLDER_PATTERN = Pattern.compile("island_block_total_worth_(.+)");
     private static final Pattern BLOCK_WORTH_PLACEHOLDER_PATTERN = Pattern.compile("island_block_worth_(.+)");
-    private static final Pattern COUNT_PLACEHOLDER_PATTERN = Pattern.compile("island_block_count_(.+)");
+    private static final Pattern COUNT_PLACEHOLDER_PATTERN = Pattern.compile("island_count_(.+)");
     private static final Pattern DATA_PLACEHOLDER_PATTERN = Pattern.compile("island_data_(.+)");
     private static final Pattern EFFECT_PLACEHOLDER_PATTERN = Pattern.compile("island_effect_(.+)");
     private static final Pattern ENTITY_COUNT_PLACEHOLDER_PATTERN = Pattern.compile("island_entity_count_(.+)");
@@ -251,13 +251,11 @@ public class PlaceholdersServiceImpl implements PlaceholdersService, IService {
                             island.getIslandLevel().toString())
                     .put("locked", (island, superiorPlayer) ->
                             Formatters.BOOLEAN_FORMATTER.format(island.isLocked(), superiorPlayer.getUserLocale()))
-                    .put("name", (island, superiorPlayer) ->
-                            plugin.getSettings().getIslandNames().isColorSupport() ?
-                                    Formatters.COLOR_FORMATTER.format(island.getName()) : island.getName())
+                    .put("name", (island, superiorPlayer) -> island.getName())
+                    .put("name_formatted", (island, superiorPlayer) -> island.getFormattedName())
                     .put("name_leader", (island, superiorPlayer) ->
-                            island.getName().isEmpty() ? island.getOwner().getName() :
-                                    plugin.getSettings().getIslandNames().isColorSupport() ?
-                                            Formatters.COLOR_FORMATTER.format(island.getName()) : island.getName())
+                            island.getName().isEmpty() ? island.getOwner().getName() : island.getName())
+                    .put("name_stripped", (island, superiorPlayer) -> island.getStrippedName())
                     .put("nether_unlocked", (island, superiorPlayer) ->
                             Formatters.BOOLEAN_FORMATTER.format(island.isNetherEnabled(), superiorPlayer.getUserLocale()))
                     .put("normal_unlocked", (island, superiorPlayer) ->
@@ -625,7 +623,8 @@ public class PlaceholdersServiceImpl implements PlaceholdersService, IService {
             }
 
             if (superiorPlayer != null) {
-                if ((matcher = BLOCK_COUNT_PLACEHOLDER_PATTERN.matcher(placeholder)).matches()) {
+                if ((matcher = BLOCK_COUNT_PLACEHOLDER_PATTERN.matcher(placeholder)).matches() ||
+                        (matcher = COUNT_PLACEHOLDER_PATTERN.matcher(placeholder)).matches()) {
                     String keyName = matcher.group(1);
                     return Optional.of(island.getBlockCountAsBigInteger(Keys.ofMaterialAndData(keyName)) + "");
                 } else if ((matcher = BLOCK_LEVEL_PLACEHOLDER_PATTERN.matcher(placeholder)).matches()) {
@@ -649,9 +648,6 @@ public class PlaceholdersServiceImpl implements PlaceholdersService, IService {
                     String keyName = matcher.group(1);
                     BlockValue blockValue = plugin.getBlockValues().getBlockValue(Keys.ofMaterialAndData(keyName));
                     return Optional.of(blockValue.getWorth() + "");
-                } else if ((matcher = COUNT_PLACEHOLDER_PATTERN.matcher(placeholder)).matches()) {
-                    String keyName = matcher.group(1);
-                    return Optional.of(island.getBlockCountAsBigInteger(Keys.ofMaterialAndData(keyName)) + "");
                 } else if ((matcher = DATA_PLACEHOLDER_PATTERN.matcher(placeholder)).matches()) {
                     String keyName = matcher.group(1);
                     Object data = island.getPersistentDataContainer().get(keyName);

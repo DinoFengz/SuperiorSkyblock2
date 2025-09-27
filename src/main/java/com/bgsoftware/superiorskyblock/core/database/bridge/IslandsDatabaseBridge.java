@@ -28,6 +28,7 @@ import com.bgsoftware.superiorskyblock.core.LegacyMasks;
 import com.bgsoftware.superiorskyblock.core.ObjectsPools;
 import com.bgsoftware.superiorskyblock.core.database.serialization.IslandsSerializer;
 import com.bgsoftware.superiorskyblock.core.serialization.Serializers;
+import com.bgsoftware.superiorskyblock.island.IslandNames;
 import com.bgsoftware.superiorskyblock.island.chunk.DirtyChunksContainer;
 import com.bgsoftware.superiorskyblock.world.Dimensions;
 import org.bukkit.Location;
@@ -167,7 +168,7 @@ public class IslandsDatabaseBridge {
     public static void saveName(Island island) {
         runOperationIfRunning(island.getDatabaseBridge(), databaseBridge -> databaseBridge.updateObject("islands",
                 createFilter("uuid", island),
-                new Pair<>("name", island.getName())
+                new Pair<>("name", IslandNames.getNameForDatabase(island))
         ));
     }
 
@@ -300,6 +301,12 @@ public class IslandsDatabaseBridge {
     public static void clearEntityLimits(Island island) {
         runOperationIfRunning(island.getDatabaseBridge(), databaseBridge -> databaseBridge.deleteObject("islands_entity_limits",
                 createFilter("island", island)));
+    }
+
+    public static void removeEntityLimit(Island island, Key entity) {
+        runOperationIfRunning(island.getDatabaseBridge(), databaseBridge -> databaseBridge.deleteObject("islands_entity_limits",
+                createFilter("island", island, new Pair<>("entity", entity.toString()))
+        ));
     }
 
     public static void saveTeamLimit(Island island) {
@@ -645,7 +652,7 @@ public class IslandsDatabaseBridge {
                     new Pair<>("levels_bonus", island.getBonusLevel() + ""),
                     new Pair<>("locked", island.isLocked()),
                     new Pair<>("ignored", island.isIgnored()),
-                    new Pair<>("name", island.getName()),
+                    new Pair<>("name", IslandNames.getNameForDatabase(island)),
                     new Pair<>("description", island.getDescription()),
                     new Pair<>("generated_schematics", LegacyMasks.convertGeneratedSchematicsMask(island.getGeneratedSchematics())),
                     new Pair<>("unlocked_worlds", LegacyMasks.convertUnlockedWorldsMask(island.getUnlockedWorlds())),
