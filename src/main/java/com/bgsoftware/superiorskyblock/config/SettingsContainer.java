@@ -216,7 +216,7 @@ public class SettingsContainer {
     public final Map<String, Location> islandPreviewsLocations;
     public final boolean tabCompleteHideVanished;
     public final boolean dropsUpgradePlayersMultiply;
-    public final long protectedMessageDelay;
+    public final Map<String, Long> messageDelays;
     public final boolean warpCategories;
     public final boolean physicsListener;
     public final double chargeOnWarp;
@@ -233,6 +233,7 @@ public class SettingsContainer {
     public final boolean chatSigningSupport;
     public final int commandsPerPage;
     public final boolean cacheSchematics;
+    public final Map<String, KeySet> entityCategories;
 
     public SettingsContainer(SuperiorSkyblockPlugin plugin, YamlConfiguration config) throws ManagerLoadException {
         databaseType = config.getString("database.type").toUpperCase(Locale.ENGLISH);
@@ -561,7 +562,13 @@ public class SettingsContainer {
         this.islandPreviewsLocations = Collections.unmodifiableMap(islandPreviewsLocations);
         tabCompleteHideVanished = config.getBoolean("tab-complete-hide-vanished", true);
         dropsUpgradePlayersMultiply = config.getBoolean("drops-upgrade-players-multiply", false);
-        protectedMessageDelay = config.getLong("protected-message-delay", 60L);
+        Map<String, Long> messageDelays = new HashMap<>();
+        if (config.isConfigurationSection("message-delays")) {
+            for (String message : config.getConfigurationSection("message-delays").getKeys(false)) {
+                messageDelays.put(message.toUpperCase(Locale.ENGLISH), config.getLong("message-delays." + message));
+            }
+        }
+        this.messageDelays = Collections.unmodifiableMap(messageDelays);
         warpCategories = config.getBoolean("warp-categories", true);
         physicsListener = config.getBoolean("physics-listener", true);
         chargeOnWarp = config.getDouble("charge-on-warp", 0D);
@@ -588,6 +595,7 @@ public class SettingsContainer {
         chatSigningSupport = config.getBoolean("chat-signing-support", true);
         commandsPerPage = config.getInt("commands-per-page", 7);
         cacheSchematics = config.getBoolean("cache-schematics", true);
+        entityCategories = parseEntityCategories(config.getConfigurationSection("entity-categories"));
     }
 
     private List<ClearAction> loadClearActions(List<String> clearActionsNames) {
@@ -662,6 +670,21 @@ public class SettingsContainer {
             defaultGenerator.put(blockKey, percentage);
         });
         this.defaultGenerator.put(dimension, KeyMaps.unmodifiableKeyMap(defaultGenerator));
+    }
+
+    private static Map<String, KeySet> parseEntityCategories(ConfigurationSection section) {
+        Map<String, KeySet> entityCategories = new HashMap<>();
+
+        for (String categoryName : section.getKeys(false)) {
+            KeySet entityTypes = KeySets.createHashSet(KeyIndicator.ENTITY_TYPE);
+            for (String entityType : section.getStringList(categoryName)) {
+                entityTypes.add(Keys.ofEntityType(entityType));
+            }
+            if (!entityTypes.isEmpty())
+                entityCategories.put(categoryName, KeySets.unmodifiableKeySet(entityTypes));
+        }
+
+        return entityCategories.isEmpty() ? Collections.emptyMap() : Collections.unmodifiableMap(entityCategories);
     }
 
     private static void loadListOrSection(YamlConfiguration config, String path, String parseName, BiConsumer<String, Integer> consumer) {
