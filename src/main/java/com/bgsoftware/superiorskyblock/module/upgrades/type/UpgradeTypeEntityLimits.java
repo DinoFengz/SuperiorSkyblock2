@@ -4,17 +4,20 @@ import com.bgsoftware.common.annotations.Nullable;
 import com.bgsoftware.superiorskyblock.SuperiorSkyblockPlugin;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.commands.ISuperiorCommand;
-import com.bgsoftware.superiorskyblock.core.LocationKey;
 import com.bgsoftware.superiorskyblock.core.Materials;
 import com.bgsoftware.superiorskyblock.core.ObjectsPools;
 import com.bgsoftware.superiorskyblock.core.PlayerHand;
 import com.bgsoftware.superiorskyblock.core.collections.AutoRemovalMap;
 import com.bgsoftware.superiorskyblock.core.collections.CollectionsFactory;
+import com.bgsoftware.superiorskyblock.core.collections.Location2ObjectMap;
 import com.bgsoftware.superiorskyblock.core.collections.view.Int2ObjectMapView;
 import com.bgsoftware.superiorskyblock.core.formatting.Formatters;
 import com.bgsoftware.superiorskyblock.core.key.Keys;
 import com.bgsoftware.superiorskyblock.core.messages.Message;
 import com.bgsoftware.superiorskyblock.core.threads.BukkitExecutor;
+import com.bgsoftware.superiorskyblock.module.upgrades.commands.CmdAdminAddEntityLimit;
+import com.bgsoftware.superiorskyblock.module.upgrades.commands.CmdAdminRemoveEntityLimit;
+import com.bgsoftware.superiorskyblock.module.upgrades.commands.CmdAdminSetEntityLimit;
 import com.bgsoftware.superiorskyblock.world.BukkitEntities;
 import com.bgsoftware.superiorskyblock.world.BukkitItems;
 import org.bukkit.Location;
@@ -37,7 +40,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.lang.ref.WeakReference;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 public class UpgradeTypeEntityLimits implements IUpgradeType {
 
     private final Map<EntityType, SpawningPlayerData> entityBreederPlayers = AutoRemovalMap.newHashMap(2, TimeUnit.SECONDS);
-    private final Map<LocationKey, SpawningPlayerData> vehiclesOwners = AutoRemovalMap.newHashMap(2, TimeUnit.SECONDS);
+    private final Map<Location, SpawningPlayerData> vehiclesOwners = AutoRemovalMap.newMap(2, TimeUnit.SECONDS, Location2ObjectMap::new);
     private final Map<EntityType, SpawningPlayerData> spawnEggPlayers = AutoRemovalMap.newHashMap(2, TimeUnit.SECONDS);
 
     private final SuperiorSkyblockPlugin plugin;
@@ -69,7 +72,7 @@ public class UpgradeTypeEntityLimits implements IUpgradeType {
 
     @Override
     public List<ISuperiorCommand> getCommands() {
-        return Collections.emptyList();
+        return Arrays.asList(new CmdAdminAddEntityLimit(), new CmdAdminRemoveEntityLimit(), new CmdAdminSetEntityLimit());
     }
 
     private Optional<Listener> checkEntityBreedListener() {
@@ -163,7 +166,6 @@ public class UpgradeTypeEntityLimits implements IUpgradeType {
             if (!isMinecart && !isBoat)
                 return;
 
-            LocationKey futureEntitySpawnLocation;
             try (ObjectsPools.Wrapper<Location> wrapper = ObjectsPools.LOCATION.obtain()) {
                 Location blockLocation = e.getClickedBlock().getLocation(wrapper.getHandle());
                 Island island = plugin.getGrid().getIslandAt(blockLocation);
@@ -171,12 +173,11 @@ public class UpgradeTypeEntityLimits implements IUpgradeType {
                 if (island == null)
                     return;
 
-                futureEntitySpawnLocation = isMinecart ? LocationKey.of(blockLocation, false) :
-                        LocationKey.of(blockLocation.getWorld().getName(), blockLocation.getX(),
-                                blockLocation.getY() + 1, blockLocation.getZ(), false);
-            }
+                Location futureEntitySpawnLocation = isMinecart ? blockLocation :
+                        blockLocation.add(0, 1, 0);
 
-            vehiclesOwners.put(futureEntitySpawnLocation, new SpawningPlayerData(e.getPlayer()));
+                vehiclesOwners.put(futureEntitySpawnLocation, new SpawningPlayerData(e.getPlayer()));
+            }
         }
 
         @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -188,7 +189,7 @@ public class UpgradeTypeEntityLimits implements IUpgradeType {
                 return;
 
             Island island;
-            LocationKey entityBlockLocation;
+            SpawningPlayerData vehicleOwnerData;
 
             try (ObjectsPools.Wrapper<Location> wrapper = ObjectsPools.LOCATION.obtain()) {
                 Location entityLocation = entity.getLocation(wrapper.getHandle());
@@ -197,15 +198,9 @@ public class UpgradeTypeEntityLimits implements IUpgradeType {
                 if (island == null)
                     return;
 
-                entityBlockLocation = LocationKey.of(
-                        entityLocation.getWorld().getName(),
-                        entityLocation.getBlockX(),
-                        entityLocation.getBlockY(),
-                        entityLocation.getBlockZ()
-                );
+                vehicleOwnerData = vehiclesOwners.remove(entityLocation);
             }
 
-            SpawningPlayerData vehicleOwnerData = vehiclesOwners.remove(entityBlockLocation);
             Player vehicleOwner = vehicleOwnerData == null ? null : vehicleOwnerData.player.get();
 
             boolean hasReachedLimit = island.hasReachedEntityLimit(Keys.of(entity)).join();

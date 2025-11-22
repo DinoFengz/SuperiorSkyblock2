@@ -67,6 +67,10 @@ public class StackedBlocksInteractionServiceImpl implements StackedBlocksInterac
         if (!plugin.getSettings().getStackedBlocks().isEnabled())
             return InteractionResult.STACKED_BLOCKS_DISABLED;
 
+        // We do not care about spawn island, and therefore only island worlds are relevant.
+        if (!plugin.getGrid().isIslandsWorld(block.getWorld()))
+            return InteractionResult.DISABLED_WORLD;
+
         Player onlinePlayer = superiorPlayer.asPlayer();
         ItemStack handItem = onlinePlayer == null ? null : BukkitItems.getHandItem(onlinePlayer, PlayerHand.of(usedHand));
 
@@ -89,6 +93,10 @@ public class StackedBlocksInteractionServiceImpl implements StackedBlocksInterac
         if (!plugin.getSettings().getStackedBlocks().isEnabled())
             return InteractionResult.STACKED_BLOCKS_DISABLED;
 
+        // We do not care about spawn island, and therefore only island worlds are relevant.
+        if (!plugin.getGrid().isIslandsWorld(block.getWorld()))
+            return InteractionResult.DISABLED_WORLD;
+
         InteractionResult interactionResult = checkBlockStackInternal(superiorPlayer, block, null);
         if (interactionResult != InteractionResult.SUCCESS)
             return interactionResult;
@@ -102,12 +110,20 @@ public class StackedBlocksInteractionServiceImpl implements StackedBlocksInterac
         Preconditions.checkNotNull(block, "block parameter cannot be null");
         Preconditions.checkNotNull(itemStack, "itemStack parameter cannot be null");
 
+        // We do not care about spawn island, and therefore only island worlds are relevant.
+        if (!plugin.getGrid().isIslandsWorld(block.getWorld()))
+            return InteractionResult.DISABLED_WORLD;
+
         return checkBlockStackInternal(superiorPlayer, block, itemStack);
     }
 
     @Override
     public InteractionResult handleStackedBlockBreak(Block block, @Nullable SuperiorPlayer superiorPlayer) {
         Preconditions.checkNotNull(block, "block cannot be null");
+
+        // We do not care about spawn island, and therefore only island worlds are relevant.
+        if (!plugin.getGrid().isIslandsWorld(block.getWorld()))
+            return InteractionResult.DISABLED_WORLD;
 
         try (ObjectsPools.Wrapper<Location> wrapper = ObjectsPools.LOCATION.obtain()) {
             Location blockLocation = block.getLocation(wrapper.getHandle());
@@ -222,8 +238,11 @@ public class StackedBlocksInteractionServiceImpl implements StackedBlocksInterac
         if (blockAmount + amountToDeposit > blockLimit)
             amountToDeposit = blockLimit - blockAmount;
 
-        if (amountToDeposit <= 0)
+        if (amountToDeposit <= 0) {
+            // Inform GUI/caller that nothing was deposited so it can refund its previewed removal
+            removalData.ifRight(cb -> cb.accept(0));
             return InteractionResult.NOT_ENOUGH_BLOCKS;
+        }
 
         Island island = plugin.getGrid().getIslandAt(stackedBlockLocation);
         if (island != null) {
@@ -248,13 +267,25 @@ public class StackedBlocksInteractionServiceImpl implements StackedBlocksInterac
             }
         }
 
+        if (amountToDeposit <= 0) {
+            // Island/global limit reached ⇒ notify caller so it can refund
+            removalData.ifRight(cb -> cb.accept(0));
+            return InteractionResult.NOT_ENOUGH_BLOCKS;
+        }
+
         int newStackedBlockAmount = blockAmount + amountToDeposit;
 
-        if (onlinePlayer != null && !PluginEventsFactory.callBlockStackEvent(stackedBlock, onlinePlayer, blockAmount, newStackedBlockAmount))
+        if (onlinePlayer != null && !PluginEventsFactory.callBlockStackEvent(stackedBlock, onlinePlayer, blockAmount, newStackedBlockAmount)) {
+            // Event cancelled ⇒ nothing deposited, request refund
+            removalData.ifRight(cb -> cb.accept(0));
             return InteractionResult.EVENT_CANCELLED;
+        }
 
-        if (!plugin.getStackedBlocks().setStackedBlock(stackedBlockLocation, blockKey, newStackedBlockAmount))
+        if (!plugin.getStackedBlocks().setStackedBlock(stackedBlockLocation, blockKey, newStackedBlockAmount)) {
+            // Failed to persist/update ⇒ request refund
+            removalData.ifRight(cb -> cb.accept(0));
             return InteractionResult.GLITCHED_STACKED_BLOCK;
+        }
 
         if (island != null)
             island.handleBlockPlace(blockKey, amountToDeposit);

@@ -4,6 +4,7 @@ import com.bgsoftware.superiorskyblock.SuperiorSkyblockPlugin;
 import com.bgsoftware.superiorskyblock.api.events.IslandUpgradeEvent;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
+import com.bgsoftware.superiorskyblock.api.modules.ModuleLogger;
 import com.bgsoftware.superiorskyblock.api.service.placeholders.PlaceholdersService;
 import com.bgsoftware.superiorskyblock.api.upgrades.Upgrade;
 import com.bgsoftware.superiorskyblock.api.upgrades.UpgradeLevel;
@@ -22,6 +23,7 @@ import com.bgsoftware.superiorskyblock.core.formatting.Formatters;
 import com.bgsoftware.superiorskyblock.core.messages.Message;
 import com.bgsoftware.superiorskyblock.island.privilege.IslandPrivileges;
 import com.bgsoftware.superiorskyblock.island.upgrade.SUpgradeLevel;
+import com.bgsoftware.superiorskyblock.module.BuiltinModules;
 import org.bukkit.Bukkit;
 
 import java.time.Duration;
@@ -132,11 +134,16 @@ public class CmdRankup implements IPermissibleCommand {
                     upgradeCost.withdrawCost(superiorPlayer);
 
                     for (String command : event.getArgs().commands) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                placeholdersService.get().parsePlaceholders(superiorPlayer.asOfflinePlayer(), command
-                                        .replace("%player%", superiorPlayer.getName())
-                                        .replace("%leader%", island.getOwner().getName()))
-                        );
+                        String parsedCommand = placeholdersService.get().parsePlaceholders(superiorPlayer.asOfflinePlayer(), command
+                                .replace("%player%", superiorPlayer.getName())
+                                .replace("%leader%", island.getOwner().getName()));
+
+                        try {
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsedCommand);
+                        } catch (Throwable error) {
+                            ModuleLogger logger = (ModuleLogger) BuiltinModules.UPGRADES.getLogger();
+                            logger.e("An unexpected error occurred while executing command:\n" + parsedCommand, error);
+                        }
                     }
 
                     hasNextLevel = true;

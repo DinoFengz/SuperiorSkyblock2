@@ -34,7 +34,8 @@ public class CmdAdminUnlockWorld implements IAdminIslandCommand {
         return "admin unlockworld <" +
                 Message.COMMAND_ARGUMENT_PLAYER_NAME.getMessage(locale) + "/" +
                 Message.COMMAND_ARGUMENT_ISLAND_NAME.getMessage(locale) + "/" +
-                Message.COMMAND_ARGUMENT_ALL_ISLANDS.getMessage(locale) + "> <nether/the_end/normal> <true/false>";
+                Message.COMMAND_ARGUMENT_ALL_ISLANDS.getMessage(locale) + "> <" +
+                Message.COMMAND_ARGUMENT_DIMENSION.getMessage(locale) + "> <true/false>";
     }
 
     @Override
@@ -74,32 +75,61 @@ public class CmdAdminUnlockWorld implements IAdminIslandCommand {
             return;
         }
 
-        boolean enable = Boolean.parseBoolean(args[4]);
+        boolean unlockWorld = Boolean.parseBoolean(args[4]);
 
-        int islandsChangedCount = 0;
-
-        for (Island island : islands) {
-            if (enable ? !PluginEventsFactory.callIslandUnlockWorldEvent(island, sender, dimension) :
-                    !PluginEventsFactory.callIslandLockWorldEvent(island, sender, dimension))
-                continue;
-
-            island.setDimensionEnabled(dimension, enable);
-            ++islandsChangedCount;
+        if (unlockWorld) {
+            handleWorldUnlock(sender, islands, dimension, targetPlayer, args[3]);
+        } else {
+            handleWorldLock(sender, islands, dimension, targetPlayer, args[3]);
         }
-
-        if (islandsChangedCount > 0)
-            Message.UNLOCK_WORLD_ANNOUNCEMENT.send(sender, Formatters.CAPITALIZED_FORMATTER.format(args[3]));
     }
 
     @Override
     public List<String> adminTabComplete(SuperiorSkyblockPlugin plugin, CommandSender sender, Island island, String[] args) {
-        if (args.length == 5)
-            return CommandTabCompletes.getCustomComplete(args[3], "true", "false");
+        return args.length == 4 ? CommandTabCompletes.getDimensions(plugin, args[3]) : args.length == 5 ?
+                CommandTabCompletes.getCustomComplete(args[4], "true", "false") : Collections.emptyList();
+    }
 
-        if (args.length != 4)
-            return Collections.emptyList();
+    private void handleWorldUnlock(CommandSender sender, List<Island> islands, Dimension dimension,
+                                   @Nullable SuperiorPlayer targetPlayer, String worldType) {
+        int islandsChangedCount = 0;
 
-        return CommandTabCompletes.getDimensions(args[3]);
+        for (Island island : islands) {
+            if (!PluginEventsFactory.callIslandUnlockWorldEvent(island, sender, dimension))
+                continue;
+
+            island.setDimensionEnabled(dimension, true);
+            ++islandsChangedCount;
+        }
+
+        if (islandsChangedCount > 1)
+            Message.UNLOCK_WORLD_ANNOUNCEMENT_ALL.send(sender, Formatters.CAPITALIZED_FORMATTER.format(worldType));
+        else if (targetPlayer == null)
+            Message.UNLOCK_WORLD_ANNOUNCEMENT_NAME.send(sender, Formatters.CAPITALIZED_FORMATTER.format(worldType), islands.get(0).getName());
+        else
+            Message.UNLOCK_WORLD_ANNOUNCEMENT.send(sender, Formatters.CAPITALIZED_FORMATTER.format(worldType), targetPlayer.getName());
+
+    }
+
+    private void handleWorldLock(CommandSender sender, List<Island> islands, Dimension dimension,
+                                 @Nullable SuperiorPlayer targetPlayer, String worldType) {
+        int islandsChangedCount = 0;
+
+        for (Island island : islands) {
+            if (!PluginEventsFactory.callIslandLockWorldEvent(island, sender, dimension))
+                continue;
+
+            island.setDimensionEnabled(dimension, false);
+            ++islandsChangedCount;
+        }
+
+        if (islandsChangedCount > 1)
+            Message.LOCK_WORLD_ANNOUNCEMENT_ALL.send(sender, Formatters.CAPITALIZED_FORMATTER.format(worldType));
+        else if (targetPlayer == null)
+            Message.LOCK_WORLD_ANNOUNCEMENT_NAME.send(sender, Formatters.CAPITALIZED_FORMATTER.format(worldType), islands.get(0).getName());
+        else
+            Message.LOCK_WORLD_ANNOUNCEMENT.send(sender, Formatters.CAPITALIZED_FORMATTER.format(worldType), targetPlayer.getName());
+
     }
 
 }
