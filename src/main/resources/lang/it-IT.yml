@@ -118,6 +118,7 @@ COMMAND_ARGUMENT_AMOUNT: quantità
 COMMAND_ARGUMENT_BIOME: bioma
 COMMAND_ARGUMENT_BORDER_COLOR: 'colore-bordo'
 COMMAND_ARGUMENT_COMMAND: 'comando...'
+COMMAND_ARGUMENT_DIMENSION: 'dimension'
 COMMAND_ARGUMENT_DISCORD: discord...
 COMMAND_ARGUMENT_EFFECT: effetto-pozione
 COMMAND_ARGUMENT_EMAIL: email
@@ -382,7 +383,7 @@ INVALID_BLOCK: '&c&lErrore| &7Posizione del blocco invalida {0}.'
 INVALID_BORDER_COLOR: '&c&lError | &7Colore del bordo non valido: {0}'
 INVALID_EFFECT: '&c&lErrore| &7Effetto invalido {0}.'
 INVALID_ENTITY: '&c&lErrore | &7Entità invalida {0}.'
-INVALID_ENVIRONMENT: '&c&lErrore | &7Mondo invalido {0}.'
+INVALID_ENVIRONMENT: '&c&lError | &7Invalid dimension {0}.'
 INVALID_INTERVAL: '&c&lError | &7Intervallo non valido: {0}'
 INVALID_ISLAND: '&c&lErrore | &7Non hai un''isola.'
 INVALID_ISLAND_LOCATION: '&c&lErrore | &7Non c''è un isola nella tua posizione.'
@@ -705,6 +706,7 @@ SCHEMATIC_RIGHT_SELECT: '&e&lSchematics | &7Posizione selezionata #1 ({0})'
 SCHEMATIC_SAVED: '&e&lSchematics | &7Schematica salvata con successo!'
 SELF_ROLE_CHANGE: '&c&lErrore | &7Non puoi cambiare il tuo ruolo.'
 SET_UPGRADE_LEVEL: '&e&lAggiornamenti | &7Aggiornato con successo il livello di {0} per l''isola di {1}.'
+SET_UPGRADE_LEVEL_ALL: '&e&lUpgrades | &7Successfully updated the level of {0} for all islands.'
 SET_UPGRADE_LEVEL_NAME: '&e&lAggiornamenti | &7Aggiornato con successo il livello di {0} per {1}.'
 SET_WARP: '&e&lIsola | &7Creato con successo un nuovo warp a {0}.'
 SET_WARP_OUTSIDE: '&c&lErrore | &7Non puoi impostare warp fuori dalla tua isola.'

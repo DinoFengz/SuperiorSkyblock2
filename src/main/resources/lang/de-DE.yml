@@ -167,6 +167,7 @@ COMMAND_ARGUMENT_AMOUNT: Betrag
 COMMAND_ARGUMENT_BIOME: biom
 COMMAND_ARGUMENT_BORDER_COLOR: 'border-color'
 COMMAND_ARGUMENT_COMMAND: Befehl...
+COMMAND_ARGUMENT_DIMENSION: 'dimension'
 COMMAND_ARGUMENT_DISCORD: Discord...
 COMMAND_ARGUMENT_EFFECT: Trank-Effekt
 COMMAND_ARGUMENT_EMAIL: E-Mail
@@ -488,7 +489,7 @@ INVALID_BLOCK: '&c&lError | &7Ungültige Blockposition {0}.'
 INVALID_BORDER_COLOR: '&c&lError | &7Invalid border color {0}.'
 INVALID_EFFECT: '&c&lError | &7Ungültige Wirkung {0}.'
 INVALID_ENTITY: '&c&lError | &7Ungültige Entität {0}.'
-INVALID_ENVIRONMENT: '&c&lError | &7Ungültige Welt {0}.'
+INVALID_ENVIRONMENT: '&c&lError | &7Invalid dimension {0}.'
 INVALID_INTERVAL: '&c&lError | &7Invalid interval {0}.'
 INVALID_ISLAND: '&c&lError | &7Du hast keine Insel.'
 INVALID_ISLAND_LOCATION: '&c&lError | &7An deinem Standort gibt es keine Insel.'
@@ -880,6 +881,7 @@ SCHEMATIC_SAVED: '&e&lSchematics | &7Schaltplan erfolgreich gespeichert!'
 SELF_ROLE_CHANGE: '&c&lError | &7Du kannst deine Rolle nicht ändern.'
 SET_UPGRADE_LEVEL: '&e&lUpgrades | &7Die Ebene von {0} für die Insel von {1} wurde
   erfolgreich aktualisiert.'
+SET_UPGRADE_LEVEL_ALL: '&e&lUpgrades | &7Successfully updated the level of {0} for all islands.'
 SET_UPGRADE_LEVEL_NAME: '&e&lUpgrades | &7Die Ebene von {0} für {1} wurde erfolgreich
   aktualisiert.'
 SET_WARP: '&e&lInsel | &7Erzeugt erfolgreich einen neuen Warp am {0}.'

@@ -159,6 +159,7 @@ COMMAND_ARGUMENT_AMOUNT: miktar
 COMMAND_ARGUMENT_BIOME: biyom
 COMMAND_ARGUMENT_BORDER_COLOR: sınır-rengi
 COMMAND_ARGUMENT_COMMAND: komut...
+COMMAND_ARGUMENT_DIMENSION: 'dimension'
 COMMAND_ARGUMENT_DISCORD: discord...
 COMMAND_ARGUMENT_EFFECT: iksir-efekti
 COMMAND_ARGUMENT_EMAIL: e-posta
@@ -462,7 +463,7 @@ INVALID_BLOCK: '&c&lHata | &7Geçersiz blok konumu {0}.'
 INVALID_BORDER_COLOR: '&c&lHata | &7Geçersiz sınır rengi {0}.'
 INVALID_EFFECT: '&c&lHata | &7Geçersiz efekt {0}.'
 INVALID_ENTITY: '&c&lHata | &7Geçersiz varlık {0}.'
-INVALID_ENVIRONMENT: '&c&lHata | &7Geçersiz dünya {0}.'
+INVALID_ENVIRONMENT: '&c&lError | &7Invalid dimension {0}.'
 INVALID_INTERVAL: '&c&lHata | &7Geçersiz aralık {0}.'
 INVALID_ISLAND: '&c&lHata | &7Bir adan yok.'
 INVALID_ISLAND_LOCATION: '&c&lHata | &7Konumunda bir ada bulunmuyor.'
@@ -826,6 +827,7 @@ SCHEMATIC_SAVED: '&e&lŞematikler | &7Şematik başarıyla kaydedildi!'
 SELF_ROLE_CHANGE: '&c&lHata | &7Kendi rolünü değiştiremezsin.'
 SET_UPGRADE_LEVEL: '&e&lYükseltmeler | &7{1}''in adası için {0} seviyesi başarıyla
   güncellendi.'
+SET_UPGRADE_LEVEL_ALL: '&e&lUpgrades | &7Successfully updated the level of {0} for all islands.'
 SET_UPGRADE_LEVEL_NAME: '&e&lYükseltmeler | &7{1} adası için {0} seviyesi başarıyla
   güncellendi.'
 SET_WARP: '&e&lAda | &7{0} konumunda yeni bir ışınlanma noktası başarıyla oluşturuldu.'
